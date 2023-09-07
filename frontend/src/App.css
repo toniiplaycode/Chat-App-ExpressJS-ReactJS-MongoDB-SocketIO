@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  font-family: Nunito, Arial, Helvetica, sans-serif;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  background: #f0f0f0;
+}

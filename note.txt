@@ -1,0 +1,6 @@
+- tutorial RoadSideCoder (https://www.youtube.com/watch?v=29FEesnQrjA&list=PLKhlp2qtUcSZsGkxAdgnPcHioRr-4guZf&index=4&ab_channel=RoadsideCoder)
+- sử dụng Chakra UI, lai lai bootstrap
+- dùng JWT để tạo token 
+- dùng bcrypt để mã hoá password khi sign up
+- dùng cloundineary để lưu ảnh
+- populate() 1 tham số và 2 tham số (https://chat.openai.com/c/e138a15c-ae08-4f85-b259-a821c9f57c47)
