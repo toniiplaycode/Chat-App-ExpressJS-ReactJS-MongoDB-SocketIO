@@ -5,7 +5,7 @@ import MyChats from "../components/MyChats";
 import ChatBox from "../components/ChatBox";
 
 const ChatPage = () => {
-    const { user, setUser } = ChatState();
+    const { user } = ChatState();
 
     return(
         <div style={{width: "100%"}}>

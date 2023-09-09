@@ -10,7 +10,7 @@ dotenv.config();
 const initUserRoutes = (app) => {
     router.post("/signup", registerUser)
     router.post("/login", authUser);
-    router.get("/", protect, allUsers);
+    router.get("/", protect, allUsers); // tìm kiếm user
 
     return app.use('/api/user', router);
 }
