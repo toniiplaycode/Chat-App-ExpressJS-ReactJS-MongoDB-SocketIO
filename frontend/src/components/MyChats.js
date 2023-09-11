@@ -3,7 +3,8 @@ import { ChatState } from "../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
-import { getSender } from "../config/ChatLogic";
+import { getSender } from "../handleLogic/ChatLogic";
+import GroupChatModal from "./GroupChatModal";
 
 const MyChats = () => {
     const [loggedUser, setLoggedUser] = useState();
@@ -22,7 +23,7 @@ const MyChats = () => {
             const { data } = await axios.get("http://localhost:8800/api/chat", config)
             setChats(data);
             
-            console.log(data);
+            // console.log("fecth chats: ", data);
         } catch (error) {
             toast({
                 title: "Fetch chat failed !",
@@ -64,7 +65,10 @@ const MyChats = () => {
                 >
                     My Chats
                 </Text>
-                <Button>New Group Chat +</Button>
+                
+                <GroupChatModal>
+                    <Button>New Group Chat +</Button>
+                </GroupChatModal>
             </Box>
 
             <Box
@@ -93,7 +97,7 @@ const MyChats = () => {
                                 <Text>
                                     {!chat.isGroupChat 
                                     ? getSender(loggedUser, chat.users)
-                                    : chat.chatName}
+                                    : chat.chatName} 
                                 </Text>
                             </Box>
                         ))}

@@ -18,11 +18,11 @@ const SideDrawer = () => {
     
     const navigate = useNavigate();
     
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
     
     const logoutHandle = () => {
         localStorage.removeItem("userChatApp");
-        navigate("/");
+        navigate("/");  
     }
 
     const toast = useToast();
@@ -67,15 +67,15 @@ const SideDrawer = () => {
 
             const config = {
                 headers: {
-                    "Content-type": "application/json", 
+                    "Content-type": "application/json", // khi gửi dữ liệu cho server dạng object thì dùng "Content-type": "application/json" đi kèm
                     Authorization: `Bearer ${user.token}`,
                 }    
             }
 
             const { data } = await axios.post("http://localhost:8800/api/chat", {userId}, config);
-            
-            if(!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);  
 
+            // if(!chats.find((c) => c._id === data._id)) setChats([data, ...chats]); // nếu chưa có user trong đoạn chats thì thêm vào chats, có thêm đoạn code này cũng thừa, vì bên server đã xử lý rồi
+                        
             setSelectedChat(data); 
             setLoadingChat(false);
             

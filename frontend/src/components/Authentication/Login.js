@@ -29,7 +29,7 @@ const Login = () => {
         try {
             const config = {
                 headers: {
-                    "Content-type": "application/json",
+                    "Content-type": "application/json", // khi gửi dữ liệu cho server dạng object thì dùng "Content-type": "application/json" đi kèm
                 }
             }
 

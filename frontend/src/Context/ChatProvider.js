@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 const ChatContext = createContext();
 
 const ChatProvider = ({children}) => {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(); // người dùng hiện tại đang đăng nhập
     const [selectedChat, setSelectedChat] = useState(); // dùng cho route chat 1-1, nếu chưa có thì tạo
     const [chats, setChats] = useState([]); // dùng cho route fecth tất cả các chat cho user đang đang nhập
 
