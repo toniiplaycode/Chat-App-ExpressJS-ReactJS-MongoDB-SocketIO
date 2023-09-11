@@ -1,4 +1,5 @@
-import { Box, Button, Tooltip, Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Toast, useToast } from "@chakra-ui/react";
+import { Box, Button, Tooltip, Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, useToast, flexbox } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/spinner";
 import { useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
@@ -13,7 +14,7 @@ const SideDrawer = () => {
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
-    const { user } = ChatState();
+    const { user, setSelectedChat, chats, setChats } = ChatState();
     
     const navigate = useNavigate();
     
@@ -60,10 +61,38 @@ const SideDrawer = () => {
         }
     }
 
-    const accessChat = (userId) => {
-        console.log(userId)
-    }
+    const accessChat = async (userId) => {
+        try {
+            setLoadingChat(true);
 
+            const config = {
+                headers: {
+                    "Content-type": "application/json", 
+                    Authorization: `Bearer ${user.token}`,
+                }    
+            }
+
+            const { data } = await axios.post("http://localhost:8800/api/chat", {userId}, config);
+            
+            if(!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);  
+
+            setSelectedChat(data); 
+            setLoadingChat(false);
+            
+            console.log("access chat: ", data);
+            
+            onClose(); 
+        } catch (error) {
+            toast({
+                title: "Access chat failed !",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                position: "top-right"
+            })
+        }
+    }
+    
     return(
         <>
             <Box
@@ -92,8 +121,12 @@ const SideDrawer = () => {
                     </Menu>
                     <Menu>
                         <MenuButton as={Button}>
-                            <Avatar src={user.pic} size={"sm"} mr={"6px"} cursor={"pointer"} name={user.name} />
-                            <i className="fa-solid fa-sort-down"></i>
+                            <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
+                                <Avatar src={user.pic} size={"sm"} mr={"6px"} cursor={"pointer"} name={user.name} />
+                                <p>
+                                    {user.name}
+                                </p>
+                            </Box>
                         </MenuButton>
                         <MenuList>
                             <ProfileModal user={user}>
@@ -141,7 +174,8 @@ const SideDrawer = () => {
                                     />
                                 )
                             ) }
-                            
+
+                            {loadingChat && <Spinner m={"auto"} display={"block"} mt={"20px"}/>}  
                         </DrawerBody>
                     </DrawerContent>
             </Drawer>

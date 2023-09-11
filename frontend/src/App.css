@@ -13,3 +13,7 @@
   display: flex;
   background:#cccccc;
 }
+
+::-webkit-scrollbar {
+   width: 0px;
+}
