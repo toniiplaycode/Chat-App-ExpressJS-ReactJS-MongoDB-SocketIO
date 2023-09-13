@@ -6,7 +6,7 @@ import ChatLoading from "./ChatLoading";
 import { getSender } from "../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState();
     const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
 
@@ -38,7 +38,7 @@ const MyChats = () => {
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userChatApp")));
         fetchChats();
-    }, [selectedChat]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
+    }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
 
     
     return(
