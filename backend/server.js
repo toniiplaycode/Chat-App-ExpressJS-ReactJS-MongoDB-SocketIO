@@ -6,6 +6,7 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import initUserRoutes from "./routes/userRoutes.js";
 import initChatRoutes from "./routes/chatRoutes.js";
+import initMessageRoutes from "./routes/messageRoutes.js";
 
 dotenv.config(); // thêm này để có thể dử dụng được cái biến ở .env
 const PORT = process.env.PORT;
@@ -20,5 +21,6 @@ app.use(cors({origin: true, credentials: true})); // thêm cors thì frontend m�
 
 initUserRoutes(app);
 initChatRoutes(app);
+initMessageRoutes(app);
 
 app.listen(PORT, console.log(`server running ${PORT}`.bgBrightGreen));

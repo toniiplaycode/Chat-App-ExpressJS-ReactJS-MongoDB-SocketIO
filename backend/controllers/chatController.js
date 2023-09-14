@@ -1,7 +1,6 @@
 import { Chat } from "../models/chatModel.js";
 import { User } from "../models/userModel.js";
 
-
 export const accessChat = async (req, res) => {
     const { userId } = req.body;
     
