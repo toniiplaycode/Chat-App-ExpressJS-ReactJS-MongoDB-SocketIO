@@ -1,12 +1,60 @@
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons"
 import { ChatState } from "../Context/ChatProvider";
 import { getSender, getSenderFull } from "../handleLogic/ChatLogic";
 import ProfileModal from "./ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
+import { useState } from "react";
+import axios from "axios";
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { user, selectedChat, setSelectedChat } = ChatState();
+
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [newMessage, setNewMessage] = useState("");
+
+    const toast = useToast();
+
+    const sendMessage = async (e) => {
+        if(e.key === "Enter" && newMessage.trim().length > 0) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-type": "application/json", // khi gửi dữ liệu cho server dạng object thì dùng "Content-type": "application/json" đi kèm
+                        Authorization: `Bearer ${user.token}`,
+                    }    
+                }
+                
+                setNewMessage("");
+
+                const { data } = await axios.post("http://localhost:8800/api/message", 
+                {
+                    content: newMessage,
+                    chatId: selectedChat._id,
+                }, config);          
+                
+                console.log(data);
+
+                setMessages([...messages, data]);
+            } catch (error) {
+                toast({
+                    title: "Send message failed !",
+                    description: error.message,
+                    status: "error",
+                    duration: 3000,
+                    position: "top-right"
+                })
+            }
+        }
+    }
+
+    const typingHandle = (e) => {
+        setNewMessage(e.target.value);
+
+        // handle typing indicator 
+        
+    }
 
     return(
         <>
@@ -64,7 +112,28 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                         borderRadius={"lg"}
                         overflowY={"hidden"}
                     >
-                        chat here
+                        { loading 
+                        ? (
+                            <Spinner size={"xl"} m={"auto"} display={"block"}/>
+                        ) 
+                        : (
+                            <div>
+                                
+                            </div>
+                        )
+                        }
+
+                        <FormControl
+                            onKeyDown={sendMessage}
+                            isRequired
+                        >
+                            <Input
+                                background={"#d9d9d9"}
+                                placeholder="Enter a message..."
+                                value={newMessage}
+                                onChange={typingHandle}
+                            />
+                        </FormControl>
                     </Box>
                 </>    
             ) 
