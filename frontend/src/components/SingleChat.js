@@ -1,11 +1,13 @@
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { Box, FormControl, IconButton, Input, Spinner, Text, flattenTokens, useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons"
 import { ChatState } from "../Context/ChatProvider";
 import { getSender, getSenderFull } from "../handleLogic/ChatLogic";
 import ProfileModal from "./ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import "./styleMessage.css";
+import ScrollableChat from "./ScrollableChat";
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { user, selectedChat, setSelectedChat } = ChatState();
@@ -15,6 +17,35 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const [newMessage, setNewMessage] = useState("");
 
     const toast = useToast();
+
+    const fetchMessages = async (e) => {
+        if(!selectedChat) return;
+        
+        try {
+            setLoading(true);
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                }    
+            }
+            const { data } = await axios.get(`http://localhost:8800/api/message/${selectedChat._id}`, config); 
+
+            setMessages(data);
+            setLoading(false);
+        } catch (error) {
+            toast({
+                title: "Fetch message failed !",
+                description: error.message,
+                status: "error",
+                duration: 3000,
+                position: "top-right"
+            })
+        }
+    }
+    
+    useEffect(()=>{
+        fetchMessages();
+    }, [selectedChat]);
 
     const sendMessage = async (e) => {
         if(e.key === "Enter" && newMessage.trim().length > 0) {
@@ -95,6 +126,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                                     <UpdateGroupChatModal
                                         fetchAgain={fetchAgain}
                                         setFetchAgain={setFetchAgain}
+                                        fetchMessages={fetchMessages}
                                     />
                                 </>
                             )       
@@ -117,8 +149,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                             <Spinner size={"xl"} m={"auto"} display={"block"}/>
                         ) 
                         : (
-                            <div>
-                                
+                            <div className="messages">
+                                <ScrollableChat messages={messages} />
                             </div>
                         )
                         }

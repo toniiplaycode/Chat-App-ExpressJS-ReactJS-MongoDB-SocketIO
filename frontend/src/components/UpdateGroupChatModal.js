@@ -6,7 +6,7 @@ import UserBadgeItem from "./UserBadgeItem";
 import axios from "axios";
 import UserListItem from "./UserListItem";
 
-const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
+const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { user, selectedChat, setSelectedChat } = ChatState();
 
@@ -49,6 +49,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain}) => {
 
             userRemoved._id === user._id ?  setSelectedChat() : setSelectedChat(data); 
             setFetchAgain(!fetchAgain); // !fetchAgain để fetch lại
+            fetchMessages(); // gọi lại fetchMessages của bên file SingleChat khi xoá 1 user khỏi group
             setLoading(false);
         } catch (error) {
             toast({
