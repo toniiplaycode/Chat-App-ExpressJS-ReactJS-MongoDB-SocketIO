@@ -6,7 +6,11 @@ export const getSenderFull = (loggedUser, users) => {
     return users[0]._id === loggedUser._id ? users[1] : users[0]; 
 }
 
+
+// hàm isSameSender và isLastMessage: hiển thị avatar cho người gửi message (nhắn nhiều message nhưng chỉ hiện avatar cho tin nhắn cuối cùng trước khi người nhận phản hồi)
 export const isSameSender = (messages, m, i, userId) => {
+  // console.log(m , i);
+
   return (
     i < messages.length - 1 &&
     (messages[i + 1].sender._id !== m.sender._id ||
@@ -16,6 +20,7 @@ export const isSameSender = (messages, m, i, userId) => {
 };
 
 export const isLastMessage = (messages, i, userId) => {
+  console.log(messages);
   return (
     i === messages.length - 1 &&
     messages[messages.length - 1].sender._id !== userId &&
@@ -23,8 +28,9 @@ export const isLastMessage = (messages, i, userId) => {
   );
 };
 
+// canh trái cho tin nhắn tin người gửi, canh phải cho tin nhắn người nhận
 export const isSameSenderMargin = (messages, m, i, userId) => { 
-    console.log(m , i);
+    // console.log(m , i);
 
     if (
       i < messages.length - 1 &&
@@ -43,5 +49,7 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
 };
 
 export const isSameUser = (messages, m, i) => {
+  // console.log(m , i);
+
   return i > 0 && messages[i - 1].sender._id === m.sender._id;
 };

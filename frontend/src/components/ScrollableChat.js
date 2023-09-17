@@ -13,7 +13,6 @@ const ScrollableChat = ({messages}) => {
                     key={m._id} 
                     style={{display: "flex"}} 
                 >
-                    {/* hiển thị avarta cho message cuối cùng */}
                     { (isSameSender(messages, m, i, user._id)
                      || isLastMessage(messages, i, user._id)) && 
                     (
@@ -43,7 +42,7 @@ const ScrollableChat = ({messages}) => {
                             padding: "5px 15px",
                             maxWidth: "75%",
                             marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                            // marginTop: isSameUser(messages, m, i) ? 3 : 10,
+                            marginTop: isSameUser(messages, m, i) ? 3 : 10,
                         }}
                     >
                         {m.content}
