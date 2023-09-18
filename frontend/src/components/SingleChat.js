@@ -1,4 +1,4 @@
-import { Box, FormControl, IconButton, Input, Spinner, Text, flattenTokens, useToast } from "@chakra-ui/react";
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons"
 import { ChatState } from "../Context/ChatProvider";
 import { getSender, getSenderFull } from "../handleLogic/ChatLogic";
@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./styleMessage.css";
 import ScrollableChat from "./ScrollableChat";
+import io from "socket.io-client";
+
+let socket, selectedChatCompare;
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { user, selectedChat, setSelectedChat } = ChatState();
@@ -15,6 +18,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState("");
+    const [socketConnected, setSocketConnected] = useState(false);
 
     const toast = useToast();
 
@@ -32,6 +36,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
             setMessages(data);
             setLoading(false);
+
+            socket.emit("join chat", selectedChat._id);
         } catch (error) {
             toast({
                 title: "Fetch message failed !",
@@ -42,10 +48,33 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             })
         }
     }
+
+    useEffect(() => {
+        socket = io.connect("http://localhost:8800");
+
+        socket.emit("setup", user); // gọi setup từ server gửi kèm user đang đăng nhập
+
+        socket.on("connection", () => {
+            setSocketConnected(true);
+        });
+        
+    }, []);
     
     useEffect(()=>{
         fetchMessages();
+
+        selectedChatCompare = selectedChat;
     }, [selectedChat]);
+
+    useEffect(()=>{
+        socket.on("message recieved", (newMessageRecived) => {
+            if(!selectedChat || selectedChatCompare._id !== newMessageRecived.chat._id) {
+                // give notification
+            } else {
+                setMessages([...messages, newMessageRecived]);
+            }
+        })
+    });
 
     const sendMessage = async (e) => {
         if(e.key === "Enter" && newMessage.trim().length > 0) {
@@ -65,8 +94,9 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                     chatId: selectedChat._id,
                 }, config);          
                 
-                console.log(data);
+                // console.log(data);
 
+                socket.emit("new message", data);
                 setMessages([...messages, data]);
             } catch (error) {
                 toast({
@@ -82,9 +112,6 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
     const typingHandle = (e) => {
         setNewMessage(e.target.value);
-
-        // handle typing indicator 
-        
     }
 
     return(
