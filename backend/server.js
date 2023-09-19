@@ -28,26 +28,42 @@ initMessageRoutes(app);
 const server = http.createServer(app);  // dùng http.createServer để tạo server
 
 const io = new Server(server, {
-    pingTimeout: 60000, // trong 60s mà không sử dụng thì nó sẽ disconnected, để tiết kiệm băng thông
+    pingTimeout: 60000, // trong 60s mà không sử dụng thì nó sẽ tự disconnected, để tiết kiệm băng thông
     cors: {
         origin: "http://localhost:3000"
     }
 });
 
+// socket.emit là gửi (gọi) sự kiện kèm dữ liệu (hoặc không gửi kèm dữ liệu)
+// socket.on là lắng nghe sự kiện và xử lý callback (có thể có tham số)
+
 io.on("connection", (socket) => {
-    console.log("connected to soket.io");
+    console.log("connected to soket.io".bgYellow);
 
     socket.on("setup", (userData) => {
+        // console.log(userData); // userData là user đang đăng nhập
+
         socket.join(userData._id);  // mỗi người dùng là 1 room
         socket.emit("connected"); // gọi connected từ giao diện
     });
 
     socket.on("join chat", (room) => {
-        socket.join(room); // tạo room với id của selectedChat được gửi từ giao diện
         console.log("user joined room: ", room);
+        socket.join(room); // tạo room với id của selectedChat được gửi từ giao diện
+    });
+
+    socket.on("typing", (room) => {
+        console.log("typing room: ", room);
+        socket.in(room).emit("typing")
+    });
+    socket.on("stop typing", (room) => {
+        console.log("stop typing room: ", room);
+        socket.in(room).emit("stop typing")
     });
 
     socket.on("new message", (newMessageRecieved) => { 
+        // console.log(newMessageRecieved);
+
         let chat = newMessageRecieved.chat;
         
         if(!chat.users) {
@@ -59,6 +75,11 @@ io.on("connection", (socket) => {
             if(user._id == newMessageRecieved.sender._id) return; // không gửi tin nhắn cho người gửi
             socket.in(user._id).emit("message recieved", newMessageRecieved); // gửi tin nhắn cho các room 
         });
+    });
+
+    socket.off("setup", ()=>{
+        console.log("user disconnected");
+        socket.leave(userData._id)
     })
 
 });

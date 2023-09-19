@@ -9,6 +9,8 @@ import axios from "axios";
 import "./styleMessage.css";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
+import Lottie from 'react-lottie';
+import animationData from '../animations/typing_animation.json'
 
 let socket, selectedChatCompare;
 
@@ -19,8 +21,20 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState("");
     const [socketConnected, setSocketConnected] = useState(false);
+    const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const toast = useToast();
+
+    // defaultOptions này cho typing animation 
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
 
     const fetchMessages = async (e) => {
         if(!selectedChat) return;
@@ -37,7 +51,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             setMessages(data);
             setLoading(false);
 
-            socket.emit("join chat", selectedChat._id);
+            socket.emit("join chat", selectedChat._id); // gọi join chat từ server
         } catch (error) {
             toast({
                 title: "Fetch message failed !",
@@ -54,18 +68,23 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
         socket.emit("setup", user); // gọi setup từ server gửi kèm user đang đăng nhập
 
-        socket.on("connection", () => {
+        socket.on("connected", () => {
             setSocketConnected(true);
         });
         
+        // typing và stop typing này được gọi từ server
+        socket.on("typing", () => setIsTyping(true));
+        socket.on("stop typing", () => setIsTyping(false));
     }, []);
     
     useEffect(()=>{
         fetchMessages();
 
         selectedChatCompare = selectedChat;
-    }, [selectedChat]);
+    }, [selectedChat]); // fetchMessages sẽ được gọi lại khi chọn selectedChat 
 
+
+    // useEffect này sẽ được re-render liên tục khi component thay đổi
     useEffect(()=>{
         socket.on("message recieved", (newMessageRecived) => {
             if(!selectedChat || selectedChatCompare._id !== newMessageRecived.chat._id) {
@@ -73,11 +92,13 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             } else {
                 setMessages([...messages, newMessageRecived]);
             }
-        })
+        });
     });
 
     const sendMessage = async (e) => {
         if(e.key === "Enter" && newMessage.trim().length > 0) {
+            socket.emit("stop typing", selectedChat._id);
+
             try {
                 const config = {
                     headers: {
@@ -112,6 +133,26 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
     const typingHandle = (e) => {
         setNewMessage(e.target.value);
+
+        // typing logic
+        if(!socketConnected) return;
+
+        if(!typing) {
+            setTyping(true);
+            socket.emit("typing", selectedChat._id);
+        }
+
+        // sau 3s gõ thì sẽ setTyping lại thành false
+        let lastTypingTime = new Date().getTime();
+        let timerLength = 3000;
+        setTimeout(()=>{
+            let timeNow = new Date().getTime();
+            let timeDifference = timeNow - lastTypingTime;
+            if(timeDifference >= timerLength && typing) {
+                socket.emit("stop typing", selectedChat._id);
+                setTyping(false);
+            }
+        }, timerLength);
     }
 
     return(
@@ -186,6 +227,22 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                             onKeyDown={sendMessage}
                             isRequired
                         >
+                            {isTyping 
+                            ? 
+                                <div>
+                                    <Lottie 
+                                        options={defaultOptions}
+                                        width={70}
+                                        style={{
+                                            marginTop: 5,
+                                            marginBottom: 15,
+                                            marginLeft: 0
+                                        }}                          
+                                    />
+                                </div>
+                            : 
+                                <></>
+                            } 
                             <Input
                                 background={"#d9d9d9"}
                                 placeholder="Enter a message..."
