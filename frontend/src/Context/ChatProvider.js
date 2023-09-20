@@ -7,6 +7,7 @@ const ChatProvider = ({children}) => {
     const [user, setUser] = useState(); // người dùng hiện tại đang đăng nhập
     const [selectedChat, setSelectedChat] = useState(); // dùng cho route chat 1-1, nếu chưa có thì tạo
     const [chats, setChats] = useState([]); // dùng cho route fecth tất cả các chat cho user đang đang nhập
+    const [notification, setNotification] = useState([]); // dùng để thông báo các tin nhắn chưa đọc (chưa selectedChat)
 
     const navigate = useNavigate(); // useNavigate chỉ dùng được khi nằm trong BrowserRouter
 
@@ -21,7 +22,7 @@ const ChatProvider = ({children}) => {
     }, [navigate]) // khi nào chuyển route(dependencies navigate thay đổi) thì callback trong useEffect được gọi
 
     return (
-        <ChatContext.Provider value={{user, setUser, selectedChat, setSelectedChat, chats, setChats}}>
+        <ChatContext.Provider value={{user, setUser, selectedChat, setSelectedChat, chats, setChats, notification, setNotification}}>
             {children}
         </ChatContext.Provider>
     )

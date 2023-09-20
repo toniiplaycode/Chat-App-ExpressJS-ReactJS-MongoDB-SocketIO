@@ -7,6 +7,8 @@ import { useNavigate } from "react-router";
 import axios from 'axios';
 import ChatLoading from "./ChatLoading";
 import UserListItem from "./UserListItem";
+import { getSender } from "../handleLogic/ChatLogic";
+import "./styleNotification.css";
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
@@ -14,7 +16,7 @@ const SideDrawer = () => {
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
-    const { user, setSelectedChat, chats, setChats } = ChatState();
+    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
     
     const navigate = useNavigate();
     
@@ -116,8 +118,35 @@ const SideDrawer = () => {
                 <Box display={"flex"}>
                     <Menu>
                         <MenuButton mx={"10px"}>
-                            <i className="fa-regular fa-bell" style={{fontSize: "1.2rem"}}></i>
+                            <a href="#" class="notification">
+                                <span>
+                                    <i className="fa-regular fa-bell" style={{fontSize: "1.2rem"}}></i>
+                                </span>
+                                {
+                                    notification.length > 0 && 
+                                    <span className="badge w3-animate-top">
+                                        {notification.length}
+                                    </span>
+                                }
+                            </a>
                         </MenuButton>
+                        <MenuList pl={"5px"}>
+                            {!notification.length && "No new messages"}
+                            {notification.map((notif) => (
+                                <MenuItem
+                                    key={notif._chat}
+                                    onClick={() => {
+                                        setSelectedChat(notif.chat);
+                                        setNotification(notification.filter(n => n!== notif));
+                                    }}
+                                >
+                                    {notif.chat.isGroupChat 
+                                    ? `New message in ${notif.chat.chatName}`
+                                    : `New message from ${getSender(user, notif.chat.users)}`
+                                    }      
+                                </MenuItem>
+                            ))}
+                        </MenuList>
                     </Menu>
                     <Menu>
                         <MenuButton as={Button}>

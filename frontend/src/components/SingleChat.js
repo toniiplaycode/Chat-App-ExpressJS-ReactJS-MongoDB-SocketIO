@@ -15,7 +15,7 @@ import animationData from '../animations/typing_animation.json'
 let socket, selectedChatCompare;
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -78,22 +78,33 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     }, []);
     
     useEffect(()=>{
-        fetchMessages();
+        fetchMessages();    
 
         selectedChatCompare = selectedChat;
     }, [selectedChat]); // fetchMessages sẽ được gọi lại khi chọn selectedChat 
 
-
     // useEffect này sẽ được re-render liên tục khi component thay đổi
     useEffect(()=>{
+        // console.log("re-render");
+        
+        // message recieved này sẽ được gọi khi có user khác gửi tin nhắn
         socket.on("message recieved", (newMessageRecived) => {
-            if(!selectedChat || selectedChatCompare._id !== newMessageRecived.chat._id) {
-                // give notification
+            // console.log(newMessageRecived);
+            // console.log(notification.includes(newMessageRecived.chat._id));
+            // console.log(notification);
+            // điều kiện thứ 2 là khi user đang trong tin nhắn thì không cần gửi thông báo 
+            if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
+                if(!notification.includes(newMessageRecived)) {
+                    setNotification([...notification, newMessageRecived]);
+                    setFetchAgain(!fetchAgain);
+                }
             } else {
                 setMessages([...messages, newMessageRecived]);
             }
         });
     });
+
+    // console.log("notification: ", notification);
 
     const sendMessage = async (e) => {
         if(e.key === "Enter" && newMessage.trim().length > 0) {
