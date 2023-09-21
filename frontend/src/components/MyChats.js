@@ -8,7 +8,7 @@ import GroupChatModal from "./GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState();
-    const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
+    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
 
     const toast = useToast();
 
@@ -39,7 +39,6 @@ const MyChats = ({ fetchAgain }) => {
         setLoggedUser(JSON.parse(localStorage.getItem("userChatApp")));
         fetchChats();
     }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
-
     
     return(
         <Box
@@ -85,7 +84,12 @@ const MyChats = ({ fetchAgain }) => {
                     <Stack overflowY={"scroll"}>
                         {chats.map((chat) => (
                             <Box
-                                onClick={() => setSelectedChat(chat)}
+                                onClick={() => {
+                                    setSelectedChat(chat)
+                                    console.log("chat: ", chat);
+                                    console.log("notification: ", notification)
+                                    setNotification(notification.filter(n => n.chat._id != chat._id));
+                                }}
                                 cursor="pointer"
                                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                                 color={selectedChat === chat ? "white" : "black"}

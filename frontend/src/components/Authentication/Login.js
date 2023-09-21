@@ -36,16 +36,27 @@ const Login = () => {
             const { data } = await axios.post("http://localhost:8800/api/user/login",
                             {email, password},
                             config);
-            localStorage.setItem("userChatApp", JSON.stringify(data));
-            toast({
-                title: 'Login successful',
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-            })
 
-            setLoading(false);
-            navigate('chats'); // điều hướng
+            if(data.login === false) {
+                toast({
+                    title: 'Invalid Email or Password, try again !',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                })
+
+                setLoading(false);
+            } else {
+                localStorage.setItem("userChatApp", JSON.stringify(data));
+                toast({
+                    title: 'Login successful',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                })
+                    
+                navigate('chats'); // điều hướng
+            }
         } catch (error) {
             toast({
                 title: 'Error Occured',

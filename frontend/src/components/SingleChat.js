@@ -87,11 +87,12 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     useEffect(()=>{
         // console.log("re-render");
         
+        
         // message recieved này sẽ được gọi khi có user khác gửi tin nhắn
         socket.on("message recieved", (newMessageRecived) => {
             // console.log(newMessageRecived);
             // console.log(notification.includes(newMessageRecived.chat._id));
-            // console.log(notification);
+            // console.log(notification);            
             // điều kiện thứ 2 là khi user đang trong tin nhắn thì không cần gửi thông báo 
             if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
                 if(!notification.includes(newMessageRecived)) {

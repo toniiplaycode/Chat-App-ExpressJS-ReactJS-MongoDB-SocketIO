@@ -118,7 +118,7 @@ const SideDrawer = () => {
                 <Box display={"flex"}>
                     <Menu>
                         <MenuButton mx={"10px"}>
-                            <a href="#" class="notification">
+                            <a href="#" className="notification">
                                 <span>
                                     <i className="fa-regular fa-bell" style={{fontSize: "1.2rem"}}></i>
                                 </span>
@@ -134,10 +134,10 @@ const SideDrawer = () => {
                             {!notification.length && "No new messages"}
                             {notification.map((notif) => (
                                 <MenuItem
-                                    key={notif._chat}
+                                    key={notif._id}
                                     onClick={() => {
                                         setSelectedChat(notif.chat);
-                                        setNotification(notification.filter(n => n!== notif));
+                                        setNotification(notification.filter(n => n !== notif));
                                     }}
                                 >
                                     {notif.chat.isGroupChat 

@@ -53,8 +53,12 @@ export const authUser = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(401);
-      throw new Error("Invalid Email or Password".bgRed);
+        //-- dùng này khi có giao diện
+        res.send({login: false}); 
+
+        //-- dùng này khi còn test trên server
+        // res.status(401);
+        // throw new Error("Invalid Email or Password".bgRed);
     }
 }
 
