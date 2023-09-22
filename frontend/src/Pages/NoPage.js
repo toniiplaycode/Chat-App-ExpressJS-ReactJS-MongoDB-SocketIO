@@ -7,7 +7,7 @@ const NoPage = () => {
             fontSize={"3xl"}
             height={"100%"}
             >
-                Page 404 not found
+                404 not found
             </Text>
         </Container>
     )

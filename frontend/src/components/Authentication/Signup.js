@@ -7,15 +7,14 @@ const Signup = () => {
     const [showPassword, setShowPassword] = useState(true);
     const [showConfirmPassword, setShowConfirmPassword] = useState(true);
     const [loading, setLoading] = useState(false);
-    const toast = useToast()
-    let navigate = useNavigate();
-
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [pic, setPic] = useState();
 
+    const toast = useToast()
+    let navigate = useNavigate();
 
     const postDetails = (pic) => {
         setLoading(true);
@@ -65,7 +64,7 @@ const Signup = () => {
         setLoading(true);
         if(!name || !email || !password || !confirmPassword){
             toast({
-                title: 'Please fill all feilds',
+                title: 'Please fill all feilds !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -76,11 +75,12 @@ const Signup = () => {
 
         if(password !== confirmPassword){
             toast({
-                title: 'Passsword do not match',
+                title: 'Passsword do not match !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
             })
+            setLoading(false);
             return;
         }
 
@@ -94,18 +94,29 @@ const Signup = () => {
             const { data } = await axios.post("http://localhost:8800/api/user/signup",
                             {name, email, password, pic},
                             config);
-                                
-            localStorage.setItem("userChatApp", JSON.stringify(data));
-         
-            toast({
-                title: 'Registration successful',
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-            })
 
-            setLoading(false);
-            navigate('chats'); // điều hướng
+            if(data.registerUser === false) {
+                toast({
+                    title: 'User Existed, please use another email !',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                })
+
+                setLoading(false);
+            } else {                                
+                localStorage.setItem("userChatApp", JSON.stringify(data));
+             
+                toast({
+                    title: 'Registration successfully !',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                })
+    
+                setLoading(false);
+                navigate('chats'); // điều hướng
+            }
         } catch (error) {
             toast({
                 title: 'Error Occured',

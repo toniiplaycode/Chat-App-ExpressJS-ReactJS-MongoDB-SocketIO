@@ -4,6 +4,7 @@ import { User } from "../models/userModel.js";
 export const registerUser = async (req, res) => {
     const { name, email, password, pic } = req.body; 
 
+    // cái validate này chỉ dùng khi còn đang test trên server
     if(!name || !email || !password) {
         res.status(400);
         throw new Error("Please enter all the fields".bgRed)
@@ -12,8 +13,13 @@ export const registerUser = async (req, res) => {
     const checkUserExist = await User.findOne({email}); // kiểm tra xem có user nào đã tồn tại chưa thông qua email, email là duy nhất
 
     if(checkUserExist) {
-        res.status(400);
-        throw new Error("User Existed".bgRed)
+        // -- dùng này khi có giao diện
+        res.send({registerUser: false}); 
+        return;
+
+        //-- dùng này khi còn test trên server
+        // res.status(400);
+        // throw new Error("User Existed".bgRed)
     }
       
     const user = await User.create({
@@ -23,7 +29,7 @@ export const registerUser = async (req, res) => {
         pic
     })
     
-    if(user) { // nếu create user thành công hiển thị json này
+    if(user) {
         res.status(201).json({
             _id: user._id,
             name: user.name,
@@ -42,13 +48,14 @@ export const authUser = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
+
+    // console.log(user);
       
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin,
         pic: user.pic,
         token: generateToken(user._id),
       });

@@ -94,7 +94,6 @@ const GroupChatModal = ({children}) => {
                 position: "top-right"
             })
             return;
-
         } catch (error) {
             toast({
                 title: "Create chat failed !",

@@ -20,14 +20,14 @@ const SideDrawer = () => {
     
     const navigate = useNavigate();
     
+    const toast = useToast();
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     
     const logoutHandle = () => {
         localStorage.removeItem("userChatApp");
         navigate("/");  
     }
-
-    const toast = useToast();
 
     const handleSearch = async () => {
         if(search.trim().length === 0) {
@@ -81,8 +81,7 @@ const SideDrawer = () => {
             setSelectedChat(data); 
             setLoadingChat(false);
             
-            console.log("access chat: ", data);
-            
+            // console.log("access chat: ", data);
             onClose(); 
         } catch (error) {
             toast({
@@ -120,7 +119,7 @@ const SideDrawer = () => {
                         <MenuButton mx={"10px"}>
                             <a href="#" className="notification">
                                 <span>
-                                    <i className="fa-regular fa-bell" style={{fontSize: "1.2rem"}}></i>
+                                    <i className="fa-regular fa-bell" style={{fontSize: "1.4rem"}}></i>
                                 </span>
                                 {
                                     notification.length > 0 && 
@@ -149,7 +148,7 @@ const SideDrawer = () => {
                         </MenuList>
                     </Menu>
                     <Menu>
-                        <MenuButton as={Button}>
+                        <MenuButton as={Button} my={"auto"}>
                             <Box display={"flex"} flexDirection={"row"} alignItems={"center"}>
                                 <Avatar src={user.pic} size={"sm"} mr={"6px"} cursor={"pointer"} name={user.name} />
                                 <p>
