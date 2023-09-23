@@ -42,7 +42,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
         try {
             setLoading(true);
             const config = {
-                headers: {
+                headers: {  
                     Authorization: `Bearer ${user.token}`,
                 }    
             }
@@ -86,8 +86,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     // useEffect này sẽ được re-render liên tục khi component thay đổi
     useEffect(()=>{
         // console.log("re-render");
-        
-        
+
         // message recieved này sẽ được gọi khi có user khác gửi tin nhắn
         socket.on("message recieved", (newMessageRecived) => {
             // console.log(newMessageRecived);
@@ -145,8 +144,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
     const typingHandle = (e) => {
         setNewMessage(e.target.value);
-
-        // typing logic
+        
         if(!socketConnected) return;
 
         if(!typing) {
@@ -186,30 +184,30 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                         />
 
                         {!selectedChat.isGroupChat 
-                            ? (
-                                <>
-                                    <Text 
-                                        fontSize={"2xl"}
-                                    >
-                                        {getSender(user, selectedChat.users)}
-                                    </Text>
-                                    <ProfileModal user={getSenderFull(user, selectedChat.users)}/>
-                                </>
-                            )     
-                            : (
-                                <>
-                                    <Text
-                                        fontSize={"2xl"}
-                                    >
-                                        {selectedChat.chatName}
-                                    </Text>
-                                    <UpdateGroupChatModal
-                                        fetchAgain={fetchAgain}
-                                        setFetchAgain={setFetchAgain}
-                                        fetchMessages={fetchMessages}
-                                    />
-                                </>
-                            )       
+                        ? (
+                            <>
+                                <Text 
+                                    fontSize={"2xl"}
+                                >
+                                    {getSender(user, selectedChat.users)}
+                                </Text>
+                                <ProfileModal user={getSenderFull(user, selectedChat.users)}/>
+                            </>
+                        )     
+                        : (
+                            <>
+                                <Text
+                                    fontSize={"2xl"}
+                                >
+                                    {selectedChat.chatName}
+                                </Text>
+                                <UpdateGroupChatModal
+                                    fetchAgain={fetchAgain}
+                                    setFetchAgain={setFetchAgain}
+                                    fetchMessages={fetchMessages}
+                                />
+                            </>
+                        )       
                         }
                     </Text>
 

@@ -9,6 +9,8 @@ import initChatRoutes from "./routes/chatRoutes.js";
 import initMessageRoutes from "./routes/messageRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
+import exp from "constants";
+import path from "path";
 
 dotenv.config(); // thêm này để có thể dử dụng được cái biến ở .env
 const PORT = process.env.PORT;
@@ -63,7 +65,7 @@ io.on("connection", (socket) => {
 
     socket.on("new message", (newMessageRecieved) => { 
         // console.log(newMessageRecieved);
-
+        
         let chat = newMessageRecieved.chat;
         
         if(!chat.users) {
@@ -83,5 +85,19 @@ io.on("connection", (socket) => {
     })
 
 });
+
+
+// -------------- deloying -------------
+const __dirname1 = path.resolve();
+if(process.env.NODE_ENV === "prodution") {
+    app.use(express.static(path.join(__dirname1, "/frontend/build")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+    });
+} else {
+    app.get("/", (req, res) => {
+        res.send("API is running successfully !");
+    });
+}
 
 server.listen(PORT, console.log(`server running ${PORT}`.bgBrightGreen))
