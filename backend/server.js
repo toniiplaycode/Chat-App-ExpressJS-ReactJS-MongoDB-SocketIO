@@ -27,6 +27,24 @@ initUserRoutes(app);
 initChatRoutes(app);
 initMessageRoutes(app);
 
+// --------------------------deployment------------------------------
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running..");
+  });
+}
+
+// --------------------------deployment------------------------------
+
 const server = http.createServer(app);  // dùng http.createServer để tạo server
 
 const io = new Server(server, {
@@ -86,18 +104,5 @@ io.on("connection", (socket) => {
 
 });
 
-
-// -------------- deloying -------------
-const __dirname1 = path.resolve();
-if(process.env.NODE_ENV === "prodution") {
-    app.use(express.static(path.join(__dirname1, "/frontend/build")));
-    app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
-    });
-} else {
-    app.get("/", (req, res) => {
-        res.send("API is running successfully !");
-    });
-}
 
 server.listen(PORT, console.log(`server running ${PORT}`.bgBrightGreen))
