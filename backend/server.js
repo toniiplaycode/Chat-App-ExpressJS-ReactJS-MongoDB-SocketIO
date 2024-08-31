@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join chat", (room) => {
-        console.log("user joined room: ", room);
+        // console.log("user joined room: ", room);
         socket.join(room); // tạo room với id của selectedChat được gửi từ giao diện
     });
 
