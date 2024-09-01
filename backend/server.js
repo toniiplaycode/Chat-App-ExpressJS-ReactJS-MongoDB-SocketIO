@@ -50,7 +50,7 @@ const server = http.createServer(app);  // dùng http.createServer để tạo s
 const io = new Server(server, {
     pingTimeout: 60000, // trong 60s mà không sử dụng thì nó sẽ tự disconnected, để tiết kiệm băng thông
     cors: {
-        origin: "http://localhost:3000"
+        origin: "http://localhost:3006"
     }
 });
 

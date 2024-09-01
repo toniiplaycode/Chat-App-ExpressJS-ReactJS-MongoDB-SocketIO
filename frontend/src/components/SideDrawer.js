@@ -17,7 +17,7 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false);
 
     const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
-    
+
     const navigate = useNavigate();
     
     const toast = useToast();
