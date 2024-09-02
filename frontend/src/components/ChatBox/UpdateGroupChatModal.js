@@ -1,10 +1,10 @@
 import { ViewIcon } from "@chakra-ui/icons";
 import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { ChatState } from "../Context/ChatProvider";
-import UserBadgeItem from "./UserBadgeItem";
+import { ChatState } from "../../Context/ChatProvider";
+import UserBadgeItem from "../UserBadgeItem";
 import axios from "axios";
-import UserListItem from "./UserListItem";
+import UserListItem from "../UserListItem";
 
 const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()

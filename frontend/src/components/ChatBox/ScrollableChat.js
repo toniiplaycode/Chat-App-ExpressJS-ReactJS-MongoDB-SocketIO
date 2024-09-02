@@ -1,7 +1,7 @@
 import ScrollableFeed from 'react-scrollable-feed'; // dùng ScrollableFeed để khi có thêm message mới được gửi thì nó tự động scroll
-import { ChatState } from '../Context/ChatProvider';
+import { ChatState } from '../../Context/ChatProvider';
 import { Avatar, Tooltip } from '@chakra-ui/react';
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '../handleLogic/ChatLogic';
+import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '../../handleLogic/ChatLogic';
  
 const ScrollableChat = ({messages}) => {
     const { user } = ChatState();

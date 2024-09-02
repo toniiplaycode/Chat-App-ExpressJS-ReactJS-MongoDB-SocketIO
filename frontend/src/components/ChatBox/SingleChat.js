@@ -1,16 +1,16 @@
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons"
-import { ChatState } from "../Context/ChatProvider";
-import { getSender, getSenderFull } from "../handleLogic/ChatLogic";
-import ProfileModal from "./ProfileModal";
+import { ChatState } from "../../Context/ChatProvider";
+import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
+import ProfileModal from "../SideDrawer/ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./styleMessage.css";
+import "../../style/styleMessage.css";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Lottie from 'react-lottie';
-import animationData from '../animations/typing_animation.json'
+import animationData from '../../animations/typing_animation.json'
 
 let socket, selectedChatCompare;
 

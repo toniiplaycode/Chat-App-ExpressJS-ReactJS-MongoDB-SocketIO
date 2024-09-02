@@ -1,9 +1,9 @@
 import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
-import { ChatState } from "../Context/ChatProvider";
+import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ChatLoading from "./ChatLoading";
-import { getSender } from "../handleLogic/ChatLogic";
+import ChatLoading from "../ChatLoading";
+import { getSender } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {

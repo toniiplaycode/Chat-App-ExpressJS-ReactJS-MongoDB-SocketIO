@@ -1,14 +1,14 @@
 import { Box, Button, Tooltip, Text, Menu, MenuButton, Avatar, MenuList, MenuItem, MenuDivider, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, useToast } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/spinner";
 import { useState } from "react";
-import { ChatState } from "../Context/ChatProvider";
+import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router";
 import axios from 'axios';
-import ChatLoading from "./ChatLoading";
-import UserListItem from "./UserListItem";
-import { getSender } from "../handleLogic/ChatLogic";
-import "./styleNotification.css";
+import ChatLoading from "../ChatLoading";
+import UserListItem from "../UserListItem";
+import { getSender } from "../../handleLogic/ChatLogic";
+import "../../style/styleNotification.css";
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
