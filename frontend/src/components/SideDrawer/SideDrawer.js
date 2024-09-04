@@ -2,7 +2,7 @@ import { Box, Button, Tooltip, Text, Menu, MenuButton, Avatar, MenuList, MenuIte
 import { Spinner } from "@chakra-ui/spinner";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
-import ProfileModal from "./ProfileModal";
+import ProfileModal from "../ProfileModal";
 import { useNavigate } from "react-router";
 import axios from 'axios';
 import ChatLoading from "../ChatLoading";

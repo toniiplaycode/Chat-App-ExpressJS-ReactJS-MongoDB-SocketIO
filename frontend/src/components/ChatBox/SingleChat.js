@@ -2,7 +2,7 @@ import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@c
 import { ArrowBackIcon } from "@chakra-ui/icons"
 import { ChatState } from "../../Context/ChatProvider";
 import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
-import ProfileModal from "../SideDrawer/ProfileModal";
+import ProfileModal from "../ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
