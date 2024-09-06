@@ -1,5 +1,5 @@
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons"
+import { Box, Button, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { ArrowBackIcon, ChevronRightIcon } from "@chakra-ui/icons"
 import { ChatState } from "../../Context/ChatProvider";
 import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
 import ProfileModal from "../ProfileModal";
@@ -23,6 +23,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const [socketConnected, setSocketConnected] = useState(false);
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    const [isClickSend, setIsClickSend] = useState(false);
 
     const toast = useToast();
 
@@ -106,8 +107,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
     // console.log("notification: ", notification);
 
-    const sendMessage = async (e) => {
-        if(e.key === "Enter" && newMessage.trim().length > 0) {
+    const sendMessage = async () => {
+        if(newMessage.trim().length > 0) {
             socket.emit("stop typing", selectedChat._id);
 
             try {
@@ -130,6 +131,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
 
                 socket.emit("new message", data);
                 setMessages([...messages, data]);
+                setIsClickSend(false);
             } catch (error) {
                 toast({
                     title: "Send message failed !",
@@ -138,9 +140,24 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                     duration: 3000,
                     position: "top-right"
                 })
+                setIsClickSend(false);
             }
         }
     }
+
+    // nhấn enter để gửi message
+    const enterToSend = (e) => {
+        if(e.key === "Enter") { 
+            sendMessage();
+        }
+    }
+
+    // nhấn click chuột để gửi message
+    useEffect(()=>{
+        if(isClickSend) {
+            sendMessage();
+        }
+    }, [isClickSend])
 
     const typingHandle = (e) => {
         setNewMessage(e.target.value);
@@ -232,34 +249,50 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                             </div>
                         )
                         }
+                        
+                        {isTyping 
+                        ? 
+                            <Box 
+                                height={"25px"}
+                            >
+                                <Lottie 
+                                    options={defaultOptions}
+                                    width={70}
+                                    style={{
+                                        marginTop: 5,
+                                        marginBottom: 15,
+                                        marginLeft: 0,
+                                        borderRadius: 10,
+                                    }}                          
+                                />
+                            </Box>
+                        : 
+                            <></>
+                        } 
 
-                        <FormControl
-                            onKeyDown={sendMessage}
-                            isRequired
+                        <Box 
+                            display={"flex"}
+                            paddingTop={"12px"}
+                            gap={"5px"}
                         >
-                            {isTyping 
-                            ? 
-                                <div>
-                                    <Lottie 
-                                        options={defaultOptions}
-                                        width={70}
-                                        style={{
-                                            marginTop: 5,
-                                            marginBottom: 15,
-                                            marginLeft: 0
-                                        }}                          
-                                    />
-                                </div>
-                            : 
-                                <></>
-                            } 
-                            <Input
-                                background={"#d9d9d9"}
-                                placeholder="Enter a message..."
-                                value={newMessage}
-                                onChange={typingHandle}
+                            <FormControl
+                                onKeyDown={enterToSend}
+                                isRequired
+                            >
+                                <Input
+                                    background={"#d9d9d9"}
+                                    placeholder="Enter a message..."
+                                    value={newMessage}
+                                    onChange={typingHandle}
+                                />
+                            </FormControl>
+
+                            <IconButton
+                                icon={<ChevronRightIcon boxSize={8}/>}
+                                onClick={() => setIsClickSend(true)}
                             />
-                        </FormControl>
+
+                        </Box>
                     </Box>
                 </>    
             ) 
