@@ -33,19 +33,35 @@ const ScrollableChat = ({messages}) => {
                     )
                     }
                     
-                    <span 
+                    <div
                         style={{
-                            background: `${
-                                m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
-                            }`,
-                            borderRadius: "20px",
-                            padding: "5px 15px",
                             marginLeft: isSameSenderMargin(messages, m, i, user._id),
                             marginTop: isSameUser(messages, m, i) ? 3 : 10,
                         }}
                     >
-                        {m.content}
-                    </span>
+                        <span
+                            style={{
+                                background: `${
+                                    m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
+                                }`,
+                                borderRadius: "10px",
+                                padding: "5px 6px",
+                            }}
+                        >
+                            {m.content}
+                        </span>
+                        <p
+                            style={{
+                                textAlign: `${
+                                    m.sender._id === user._id ? "right" : "left"
+                                }`,
+                                marginTop: "5px",
+                                fontSize: "10px",
+                            }}
+                        >
+                            {m.createdAt.split(' ')[0]}
+                        </p>
+                    </div>
                 </div>
             ))}
         </ScrollableFeed>

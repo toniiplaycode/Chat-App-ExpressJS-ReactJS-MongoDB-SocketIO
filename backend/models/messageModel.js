@@ -12,9 +12,10 @@ const messageSchema = mongoose.Schema({
     chat: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Chat"
-    }
-},{
-    timestemps: true
+    },
+    createdAt: {
+        type: String,
+    },
 })
 
 export const Message = mongoose.model("Message", messageSchema);

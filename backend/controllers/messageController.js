@@ -9,10 +9,14 @@ export const sendMessage = async (req, res) => {
         return res.sendStatus(400);
     }
 
+    const now = new Date();
+    const dateTime = now.toLocaleTimeString() + " " + now.toLocaleDateString(); 
+
     let newMessage = {
         sender: req.user._id,
         content: content,
-        chat: chatId
+        chat: chatId,
+        createdAt: dateTime,
     }
 
     try {
