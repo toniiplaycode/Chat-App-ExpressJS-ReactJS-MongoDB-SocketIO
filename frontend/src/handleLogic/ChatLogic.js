@@ -49,3 +49,13 @@ export const isSameUser = (messages, m, i) => {
 
   return i > 0 && messages[i - 1].sender._id === m.sender._id;
 };
+
+// hiển thị ngày của message
+export const showDateOfLastestMessages = (messages, m, i) => {
+  const dateBefore = messages[i-1]?.createdAt.split(' ')[1];
+  const dateCurrent = m?.createdAt.split(' ')[1];
+
+  if( dateBefore !== dateCurrent) {
+    return dateCurrent;
+  }
+}

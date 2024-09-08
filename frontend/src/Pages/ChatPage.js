@@ -7,7 +7,6 @@ import { useState } from "react";
 
 const ChatPage = () => {
     const { user } = ChatState();
-    const [fetchAgain, setFetchAgain] = useState(false); // dùng để fetch lại các chat cho user khi có thay đổi gì đó
 
     return(
         <div style={{width: "100%"}}>
@@ -19,8 +18,8 @@ const ChatPage = () => {
                 h={"90vh"}
                 p={"10px"}
             >
-                {user && <MyChats fetchAgain={fetchAgain} />}
-                {user && <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />}
+                {user && <MyChats/>}
+                {user && <ChatBox/>}
             </Box>
         </div>
     )

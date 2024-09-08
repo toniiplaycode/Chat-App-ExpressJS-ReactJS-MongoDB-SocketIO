@@ -14,8 +14,8 @@ import animationData from '../../animations/typing_animation.json'
 
 let socket, selectedChatCompare;
 
-const SingleChat = ({fetchAgain, setFetchAgain}) => {
-    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
+const SingleChat = () => {
+    const { user, selectedChat, setSelectedChat, notification, setNotification, fetchAgain, setFetchAgain } = ChatState();
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -94,6 +94,7 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
             // console.log(notification.includes(newMessageRecived.chat._id));
             // console.log(notification);            
             // điều kiện thứ 2 là khi user đang trong tin nhắn thì không cần gửi thông báo 
+
             if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
                 if(!notification.includes(newMessageRecived)) {
                     setNotification([...notification, newMessageRecived]);
@@ -105,7 +106,9 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
         });
     });
 
-    // console.log("notification: ", notification);
+    useEffect(()=>{
+        console.log(notification);
+    }, [notification]);
 
     const sendMessage = async () => {
         if(newMessage.trim().length > 0) {
@@ -132,6 +135,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                 socket.emit("new message", data);
                 setMessages([...messages, data]);
                 setIsClickSend(false);
+
+                setFetchAgain(!fetchAgain)
             } catch (error) {
                 toast({
                     title: "Send message failed !",
@@ -141,6 +146,8 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                     position: "top-right"
                 })
                 setIsClickSend(false);
+
+                setFetchAgain(!fetchAgain)
             }
         }
     }

@@ -10,7 +10,7 @@ export const sendMessage = async (req, res) => {
     }
 
     const now = new Date();
-    const dateTime = now.toLocaleTimeString() + " " + now.toLocaleDateString(); 
+    const dateTime = now.toLocaleTimeString('en-GB', { hour12: false }) + " " + now.toLocaleDateString('en-GB');  // en-GB là format ngày/tháng/năm
 
     let newMessage = {
         sender: req.user._id,

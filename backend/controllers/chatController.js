@@ -149,12 +149,13 @@ export const addGroup = async (req, res) => {
 }
 
 export const removeGroup = async (req, res) => {
-    const {chatId, userId} = req.body;
+    const {chatId, userId, changeGroupAdmin} = req.body;
 
     const removed = await Chat.findByIdAndUpdate(
         chatId,
         {
             $pull: {users: userId},
+            $set: { groupAdmin: changeGroupAdmin } // đổi admin cho user khác
         },
         {
             new: true,
@@ -162,6 +163,7 @@ export const removeGroup = async (req, res) => {
     )
     .populate("users", "-password")
     .populate("groupAdmin", "-password")
+
 
     if(!removed) {
         res.status(404);

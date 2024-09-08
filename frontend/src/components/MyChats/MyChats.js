@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
 import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -6,9 +6,9 @@ import ChatLoading from "../ChatLoading";
 import { getSender } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = () => {
     const [loggedUser, setLoggedUser] = useState();
-    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
+    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain } = ChatState();
 
     const toast = useToast();
 
@@ -39,7 +39,7 @@ const MyChats = ({ fetchAgain }) => {
         setLoggedUser(JSON.parse(localStorage.getItem("userChatApp")));
         fetchChats();
     }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
-    
+
     return(
         <Box
             display={{base: selectedChat ? "none" : "flex", md: "flex"}}
@@ -84,23 +84,42 @@ const MyChats = ({ fetchAgain }) => {
                     <Stack overflowY={"scroll"}>
                         {chats.map((chat) => (
                             <Box
+                                key={chat._id}
                                 onClick={() => {
                                     setSelectedChat(chat)
                                     setNotification(notification.filter(n => n.chat._id != chat._id));
                                 }}
                                 cursor="pointer"
-                                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                                color={selectedChat === chat ? "white" : "black"}
+                                bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8"}
                                 px={3}
                                 py={2}
                                 borderRadius="lg"
-                                key={chat._id}
+                                display={"flex"}
+                                justifyContent={"space-between"}
                             >   
-                                <Text>
+                                <Text
+                                    color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}
+                                >
                                     {!chat.isGroupChat 
                                     ? getSender(loggedUser, chat.users)
                                     : chat.chatName} 
                                 </Text>
+                                {
+                                    notification.map((m) => {
+                                        if(chat._id == m.chat._id) {
+                                            return(
+                                                <Box 
+                                                    width={"6px"}
+                                                    height={"6px"}
+                                                    background={"red"}
+                                                    borderRadius={"50%"}
+                                                    position={"relative"}
+                                                    margin={"auto 0"}
+                                                />
+                                            )
+                                        }
+                                    })
+                                }
                             </Box>
                         ))}
                     </Stack>
@@ -113,4 +132,4 @@ const MyChats = ({ fetchAgain }) => {
     )
 }
 
-export default MyChats;
+export default MyChats; 
