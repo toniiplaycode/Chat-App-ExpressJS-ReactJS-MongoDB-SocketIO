@@ -16,7 +16,7 @@ const SideDrawer = () => {
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
-    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
+    const { user, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain, setFetchAgain } = ChatState();
 
     const navigate = useNavigate();
     
@@ -80,7 +80,7 @@ const SideDrawer = () => {
                         
             setSelectedChat(data); 
             setLoadingChat(false);
-            
+            setFetchAgain(!fetchAgain);
             // console.log("access chat: ", data);
             onClose(); 
         } catch (error) {

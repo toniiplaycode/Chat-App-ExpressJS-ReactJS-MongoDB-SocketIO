@@ -28,7 +28,7 @@ const ProfileModal = ({user, children}) => {
                                 src={user.pic}
                                 boxSize={"100px"}
                                 display={"block"}
-                                margin={"0 auto 10px auto"}
+                                margin={"-10px auto 10px auto"}
                                 borderRadius={"50%"}
                             />                       
                             <Text>

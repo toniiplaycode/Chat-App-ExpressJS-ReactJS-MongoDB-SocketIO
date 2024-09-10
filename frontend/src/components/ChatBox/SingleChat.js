@@ -1,5 +1,5 @@
-import { Box, Button, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
-import { ArrowBackIcon, ChevronRightIcon } from "@chakra-ui/icons"
+import { Avatar, Box, Button, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { ArrowBackIcon, ChevronRightIcon, NotAllowedIcon } from "@chakra-ui/icons"
 import { ChatState } from "../../Context/ChatProvider";
 import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
 import ProfileModal from "../ProfileModal";
@@ -84,19 +84,15 @@ const SingleChat = () => {
         selectedChatCompare = selectedChat;
     }, [selectedChat]); // fetchMessages sẽ được gọi lại khi chọn selectedChat 
 
-    // useEffect này sẽ được re-render liên tục khi component thay đổi
-    useEffect(()=>{
-        // console.log("re-render");
-
-        // message recieved này sẽ được gọi khi có user khác gửi tin nhắn
+    useEffect(() => {
+        //  message recieved này sẽ được gọi khi có user khác gửi tin nhắn
         socket.on("message recieved", (newMessageRecived) => {
-            // console.log(newMessageRecived);
-            // console.log(notification.includes(newMessageRecived.chat._id));
-            // console.log(notification);            
-            // điều kiện thứ 2 là khi user đang trong tin nhắn thì không cần gửi thông báo 
-
-            if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
-                if(!notification.includes(newMessageRecived)) {
+            // Kiểm tra message nhận được có phải từ một cuộc trò chuyện khác không
+            if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
+                const chatExists = notification.some((n) => n.chat._id === newMessageRecived.chat._id);
+    
+                // nếu chat đó chưa có trong notification thì mới thêm 
+                if (!chatExists) {
                     setNotification([...notification, newMessageRecived]);
                     setFetchAgain(!fetchAgain);
                 }
@@ -104,12 +100,13 @@ const SingleChat = () => {
                 setMessages([...messages, newMessageRecived]);
             }
         });
-    });
-
-    useEffect(()=>{
-        console.log(notification);
-    }, [notification]);
-
+    
+        // Cleanup
+        return () => {
+            socket.off("message recieved");
+        };
+    }, [fetchAgain, messages, socket]);
+    
     const sendMessage = async () => {
         if(newMessage.trim().length > 0) {
             socket.emit("stop typing", selectedChat._id);
@@ -212,7 +209,18 @@ const SingleChat = () => {
                             <>
                                 <Text 
                                     fontSize={"2xl"}
+                                    display={"flex"}
                                 >
+                                <Avatar
+                                    mt={"7px"}
+                                    mr={1}
+                                    size={"sm"}
+                                    border={"1px solid white"}
+                                    cursor={"pointer"}
+                                    marginY={"auto"}
+                                    marginRight={"5px"}
+                                    src={getSenderFull(user, selectedChat.users).pic}
+                                />
                                     {getSender(user, selectedChat.users)}
                                 </Text>
                                 <ProfileModal user={getSenderFull(user, selectedChat.users)}/>
@@ -222,7 +230,18 @@ const SingleChat = () => {
                             <>
                                 <Text
                                     fontSize={"2xl"}
+                                    display={"flex"}
                                 >
+                                    <Avatar
+                                        mt={"7px"}
+                                        mr={1}
+                                        size={"sm"}
+                                        border={"1px solid white"}
+                                        cursor={"pointer"}
+                                        marginY={"auto"}
+                                        marginRight={"5px"}
+                                        src={"group.png"}
+                                    />
                                     {selectedChat.chatName}
                                 </Text>
                                 <UpdateGroupChatModal
@@ -252,7 +271,7 @@ const SingleChat = () => {
                         ) 
                         : (
                             <div className="messages">
-                                <ScrollableChat messages={messages} />
+                                <ScrollableChat messages={messages} selectedChat={selectedChat} />
                             </div>
                         )
                         }

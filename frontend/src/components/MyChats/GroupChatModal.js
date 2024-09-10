@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import axios from "axios";
@@ -114,6 +114,7 @@ const GroupChatModal = ({children}) => {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader textAlign={"center"} fontSize={"2xl"}>Create group chat</ModalHeader>
+                    <ModalCloseButton />
                     <ModalBody
                         display={"flex"}
                         flexDirection={"column"}

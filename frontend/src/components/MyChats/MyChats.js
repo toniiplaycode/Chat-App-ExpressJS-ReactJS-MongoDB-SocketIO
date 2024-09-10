@@ -1,9 +1,9 @@
-import { Box, Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
 import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
-import { getSender } from "../../handleLogic/ChatLogic";
+import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
 
 const MyChats = () => {
@@ -92,11 +92,23 @@ const MyChats = () => {
                                 cursor="pointer"
                                 bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8"}
                                 px={3}
-                                py={2}
+                                py={3}
                                 borderRadius="lg"
                                 display={"flex"}
-                                justifyContent={"space-between"}
+                                alignItems={"center"}
+                                position={"relative"}
                             >   
+                            
+                                <Avatar
+                                    mt={"7px"}
+                                    mr={1}
+                                    size={"sm"}
+                                    border={"1px solid white"}
+                                    cursor={"pointer"}
+                                    marginY={"auto"}
+                                    marginRight={"5px"}
+                                    src={chat.chatName == "sender" ? getSenderFull(loggedUser, chat.users).pic : "group.png"}
+                                />
                                 <Text
                                     color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}
                                 >
@@ -113,8 +125,8 @@ const MyChats = () => {
                                                     height={"6px"}
                                                     background={"red"}
                                                     borderRadius={"50%"}
-                                                    position={"relative"}
-                                                    margin={"auto 0"}
+                                                    position={"absolute"}
+                                                    right={"10px"}
                                                 />
                                             )
                                         }

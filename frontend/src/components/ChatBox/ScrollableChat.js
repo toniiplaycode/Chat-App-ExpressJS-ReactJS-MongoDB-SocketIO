@@ -1,16 +1,14 @@
 import ScrollableFeed from 'react-scrollable-feed'; // dùng ScrollableFeed để khi có thêm message mới được gửi thì nó tự động scroll
 import { ChatState } from '../../Context/ChatProvider';
 import { Avatar, Tooltip } from '@chakra-ui/react';
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, showDateOfLastestMessages } from '../../handleLogic/ChatLogic';
+import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser, showDateOfLastestMessages, showTimeMessageSended } from '../../handleLogic/ChatLogic';
+import { StarIcon } from "@chakra-ui/icons";
  
-const ScrollableChat = ({messages}) => {
+const ScrollableChat = ({messages, selectedChat}) => {
     const { user } = ChatState();
-
-    // console.log(messages);
-
+    
     return(
         <ScrollableFeed>
-
             {messages && messages.map((m, i) => (
                 <>
                     <div
@@ -42,27 +40,46 @@ const ScrollableChat = ({messages}) => {
                         { (isSameSender(messages, m, i, user._id)
                         || isLastMessage(messages, i, user._id)) && 
                         (
-                            <Tooltip
-                            label={m.sender.name}
-                            placement="bottom-start"
-                            hasArrow
+                            <div
+                                style={{
+                                    position: "relative"
+                                }}
                             >
-                                <Avatar
-                                    mt={"7px"}
-                                    mr={1}
-                                    size={"sm"}
-                                    cursor={"pointer"}
-                                    name={m.sender.name}
-                                    src={m.sender.pic}
+                                <Tooltip
+                                label={m.sender.name}
+                                placement="bottom-start"
+                                hasArrow
+                                >
+                                    <Avatar
+                                        mt={"-5px"}
+                                        mr={1}
+                                        size={"sm"}
+                                        cursor={"pointer"}
+                                        name={m.sender.name}
+                                        src={m.sender.pic}
+                                        />
+                                </Tooltip>
+                                
+                                {selectedChat.groupAdmin &&
+                                m.sender._id === selectedChat.groupAdmin._id && (
+                                    <StarIcon
+                                        boxSize={3}
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: '16',
+                                            left: '20',
+                                        }}
                                     />
-                            </Tooltip>
+                                )}
+                            </div>
+                            
                         )
                     }
                         
                         <div
                             style={{
                                 marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                                marginTop: isSameUser(messages, m, i) ? 3 : 10,
+                                // marginTop: isSameUser(messages, m, i) ? 3 : 10,
                             }}
                             >
                             <span
@@ -85,7 +102,7 @@ const ScrollableChat = ({messages}) => {
                                         fontSize: "10px",
                                     }}
                                     >
-                                {m.createdAt.split(' ')[0].substring(0, 5).length === 5 ? m.createdAt.split(' ')[0].substring(0, 5) : m.createdAt.split(' ')[0].substring(0, 4) }
+                                { showTimeMessageSended(messages, m, i) }
                             </p>
                         </div>
                     </div>

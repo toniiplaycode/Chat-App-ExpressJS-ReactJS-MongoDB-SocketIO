@@ -3,7 +3,7 @@ export const getSender = (loggedUser, users) => {
 }
 
 export const getSenderFull = (loggedUser, users) => {
-    return users[0]._id === loggedUser._id ? users[1] : users[0]; 
+    return users[0]?._id === loggedUser?._id ? users[1] : users[0]; 
 }
 
 
@@ -58,4 +58,15 @@ export const showDateOfLastestMessages = (messages, m, i) => {
   if( dateBefore !== dateCurrent) {
     return dateCurrent;
   }
+}
+
+
+// hiển thị thời gian được gửi của tin nhắn, nếu thời gian hiện tại khác thời gian liền kế trước thì mới hiện, và lỡ nếu là vẫn trường hợp đó thì xét với người dùng liền kề trước khác thì mới hiện  
+export const showTimeMessageSended = (messages, m, i) => {
+  return formatTime(m) !== formatTime(messages[i+1]) ? formatTime(m) : (m.sender._id !== messages[i+1].sender._id) ? formatTime(m) : ""
+}
+
+const formatTime = (message) => {
+  // ví dụ: 20:27:14 07/09/2024, thì chỉ lấy 20:27
+  return message?.createdAt.split(' ')[0].substring(0, 5)
 }
