@@ -6,8 +6,6 @@ import { StarIcon } from "@chakra-ui/icons";
  
 const ScrollableChat = ({messages}) => {
     const { user, selectedChat } = ChatState();
-    
-    console.log(selectedChat);
 
     return(
         <ScrollableFeed>

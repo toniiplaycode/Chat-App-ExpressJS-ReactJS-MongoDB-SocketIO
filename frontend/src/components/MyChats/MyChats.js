@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Stack, Text, useMediaQuery, useToast } from "@chakra-ui/react";
 import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -47,7 +47,7 @@ const MyChats = () => {
             alignItems={"center"}
             p={3}
             bg={"white"}
-            w={{base: "100%", md: "30%"}}
+            w={{base: "100%", md: "400px"}}
             borderRadius={"lg"}
             borderWidth={"1px"}
         >
@@ -103,13 +103,30 @@ const MyChats = () => {
                                     marginRight={"5px"}
                                     src={chat.chatName == "sender" ? getSenderFull(loggedUser, chat.users).pic : "group.png"}
                                 />
-                                <Text
-                                    color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}
-                                >
-                                    {!chat.isGroupChat 
-                                    ? getSender(loggedUser, chat.users)
-                                    : chat.chatName} 
-                                </Text>
+                                <Box>
+                                    <Text
+                                        color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}                                        
+                                        maxWidth={{base: "100px", sm: "250px", md:"180px"}}
+                                        overflow={"hidden"}
+                                        whiteSpace={"nowrap"}
+                                        textOverflow={"ellipsis"}
+                                    >
+                                        {!chat.isGroupChat 
+                                        ? getSender(loggedUser, chat.users)
+                                        : chat.chatName} 
+                                    </Text>
+                                    <Text
+                                        fontSize={"12px"}                                        
+                                        maxWidth={{base: "100px", sm: "250px", md:"180px"}}
+                                        overflow={"hidden"}
+                                        whiteSpace={"nowrap"}
+                                        textOverflow={"ellipsis"}
+                                    >
+                                         {chat?.lastestMessage?.sender?._id == loggedUser._id 
+                                         ? "Bạn: " + chat?.lastestMessage?.content 
+                                         : chat?.lastestMessage?.content}
+                                    </Text>
+                                </Box>
                                 {
                                     notification.map((m) => {
                                         if(chat._id == m.chat._id) {
@@ -129,7 +146,7 @@ const MyChats = () => {
                                 <Text
                                     position={"absolute"}
                                     right={"16px"}
-                                    fontSize={"10px"}
+                                    fontSize={"12px"}
                                 >
                                     {countTimeSend(chat.lastestMessage)} 
                                 </Text>            

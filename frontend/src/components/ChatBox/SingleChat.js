@@ -324,7 +324,7 @@ const SingleChat = () => {
             ) 
             : (
                 <Text fontSize={"3xl"} my={"auto"}>
-                    Click on a user to start chatting
+                    Hãy bắt đầu cuộc trò chuyện !
                 </Text>
             ) 
             }

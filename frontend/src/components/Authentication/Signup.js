@@ -157,7 +157,7 @@ const Signup = () => {
                     />
                     <InputRightElement width={"4rem"} mx={1}>
                         <Button size={"sm"} onClick={()=>setShowPassword(!showPassword)}>
-                            {showPassword  ? "Show" : "Hide"}
+                            {showPassword  ? "Hiện" : "Ẩn"}
                         </Button>
                     </InputRightElement>
                 </InputGroup>
@@ -172,7 +172,7 @@ const Signup = () => {
                     />
                     <InputRightElement width={"4rem"} mx={1}>
                         <Button size={"sm"} onClick={()=>setShowConfirmPassword(!showConfirmPassword)}>
-                            {showConfirmPassword  ? "Show" : "Hide"}
+                            {showConfirmPassword  ? "Hiện" : "Ẩn"}
                         </Button>
                     </InputRightElement>
                 </InputGroup>
