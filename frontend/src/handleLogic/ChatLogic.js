@@ -66,7 +66,73 @@ export const showTimeMessageSended = (messages, m, i) => {
   return formatTime(m) !== formatTime(messages[i+1]) ? formatTime(m) : (m.sender._id !== messages[i+1].sender._id) ? formatTime(m) : ""
 }
 
-const formatTime = (message) => {
+export const formatTime = (message) => {
   // ví dụ: 20:27:14 07/09/2024, thì chỉ lấy 20:27
   return message?.createdAt.split(' ')[0].substring(0, 5)
 }
+
+// đếm thời gian gửi
+export const countTimeSend = (timeMessageSend) => {
+  const timeCurrent = new Date().toLocaleTimeString('en-GB', { hour12: false }) + " " + new Date().toLocaleDateString('en-GB'); 
+
+  const timeCurrentGetTime = timeCurrent.split(' ')[0].substring(0, 5); // lấy giờ hiện tại 
+  const timeMessageSendGetTime = formatTime(timeMessageSend); // lấy giờ của tin nhắn đã gửi 
+  const timeCurrentGetDate = timeCurrent.split(' ')[1].substring(0, 10); // lấy ngày hiện tại 
+  const timeMessageSendGetDate = timeMessageSend?.createdAt.split(' ')[1].substring(0, 10); // lấy ngày  của tin nhắn đã gửi
+
+  const getSubtractTime = subtractTime(timeCurrentGetTime, timeMessageSendGetTime);
+  const getSubtractDay = subtractDays(timeCurrentGetDate, timeMessageSendGetDate);
+
+  if(getSubtractDay == 1) {
+    return "Hôm qua"
+  } else if(getSubtractDay == 0) {
+    const time = getSubtractTime;
+    if(time.split(":")[0] == "00") {
+      if(time.split(":")[1] == "00") {
+        return "Vài giây"
+      } else return time.split(":")[1] + " phút" // lấy phút
+    } else {
+      return time.split(":")[0] + " giờ" // lấy giờ 
+    }
+  } else {
+    return timeMessageSendGetDate;
+  }
+
+}
+const subtractTime = (time1, time2) => {
+  // Chuyển đổi thời gian thành phút
+  const minutes1 = parseInt(time1?.split(':')[0]) * 60 + parseInt(time1?.split(':')[1]);
+  const minutes2 = parseInt(time2?.split(':')[0]) * 60 + parseInt(time2?.split(':')[1]);
+
+  // Tính chênh lệch thời gian
+  let diffMinutes = minutes1 - minutes2;
+
+  // Đảm bảo thời gian không âm
+  if (diffMinutes < 0) {
+      diffMinutes += 24 * 60; // Thêm 24 giờ nếu chênh lệch là âm
+  }
+
+  // Chuyển đổi lại thành giờ và phút
+  const resultHours = Math.floor(diffMinutes / 60);
+  const resultMinutes = diffMinutes % 60;
+
+  // Trả về kết quả dưới dạng HH:MM
+  return `${resultHours.toString().padStart(2, '0')}:${resultMinutes.toString().padStart(2, '0')}`;
+}
+
+const subtractDays = (date1, date2) => {
+  if(date1 != undefined && date2 != undefined) {
+    // Chuyển đổi từ dd/mm/yyyy sang đối tượng Date
+    const [day1, month1, year1] = date1?.split('/');
+    const [day2, month2, year2] = date2?.split('/');
+  
+    const d1 = new Date(year1, month1 - 1, day1);
+    const d2 = new Date(year2, month2 - 1, day2);
+  
+    // Tính số ngày chênh lệch
+    const diffTime = Math.abs(d2 - d1);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+}
+
+

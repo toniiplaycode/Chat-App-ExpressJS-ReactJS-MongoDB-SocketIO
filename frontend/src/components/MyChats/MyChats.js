@@ -3,7 +3,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
-import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
+import { countTimeSend, formatTime, getSender, getSenderFull, showDateOfLastestMessages } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
 
 const MyChats = () => {
@@ -26,7 +26,7 @@ const MyChats = () => {
             // console.log("fecth chats: ", data);
         } catch (error) {
             toast({
-                title: "Fetch chat failed !",
+                title: "Fetch chat thất bại",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -58,15 +58,9 @@ const MyChats = () => {
                 display={"flex"}
                 justifyContent={"space-between"}
                 alignItems={"center"}
-            >
-                <Text
-                    fontSize={"1xl"}
-                >
-                    My Chats
-                </Text>
-                
+            >   
                 <GroupChatModal>
-                    <Button>New Group Chat +</Button>
+                    <Button>Tạo nhóm +</Button>
                 </GroupChatModal>
             </Box>
 
@@ -126,12 +120,19 @@ const MyChats = () => {
                                                     background={"red"}
                                                     borderRadius={"50%"}
                                                     position={"absolute"}
-                                                    right={"10px"}
+                                                    right={"6px"}
                                                 />
                                             )
                                         }
                                     })
                                 }
+                                <Text
+                                    position={"absolute"}
+                                    right={"16px"}
+                                    fontSize={"10px"}
+                                >
+                                    {countTimeSend(chat.lastestMessage)} 
+                                </Text>            
                             </Box>
                         ))}
                     </Stack>

@@ -17,7 +17,7 @@ const Login = () => {
         setLoading(true);
         if(!email || !password) {
             toast({
-                title: 'Please fill all the fields',
+                title: 'Vui lòng điền đủ thông tin !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -39,7 +39,7 @@ const Login = () => {
 
             if(data.login === false) {
                 toast({
-                    title: 'Invalid Email or Password, try again !',
+                    title: 'Sai email hoặc mật khẩu, hãy thử lại !',
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
@@ -49,7 +49,7 @@ const Login = () => {
             } else {
                 localStorage.setItem("userChatApp", JSON.stringify(data));
                 toast({
-                    title: 'Login successful',
+                    title: 'Đăng nhập thành công !',
                     status: 'success',
                     duration: 3000,
                     isClosable: true,
@@ -59,7 +59,7 @@ const Login = () => {
             }
         } catch (error) {
             toast({
-                title: 'Error Occured',
+                title: 'Đã xảy ra lỗi !',
                 description: error.response.data.message,
                 status: 'error',
                 duration: 3000,
@@ -75,23 +75,24 @@ const Login = () => {
                 <FormLabel>Email</FormLabel>
                 <Input 
                     type='Email'
-                    placeholder='Enter your email'
+                    placeholder='Nhập email của bạn'
                     value={email}
                     onChange={(e)=>setEmail(e.target.value)}
                 />
             </FormControl>
             
             <FormControl isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Mật khẩu</FormLabel>
                 <InputGroup>
                     <Input 
                         type={showPassword ? "password" : "text"}
+                        placeholder='Nhập mật khẩu của bạn'
                         value={password}
                         onChange={(e)=>setPassword(e.target.value)}
                     />
                     <InputRightElement width={"4rem"} mx={1}>
                         <Button size={"sm"} onClick={()=>setShowPassword(!showPassword)}>
-                            {showPassword  ? "Show" : "Hide"}
+                            {showPassword  ? "Hiện" : "Ẩn"}
                         </Button>
                     </InputRightElement>
                 </InputGroup>
@@ -104,7 +105,7 @@ const Login = () => {
             onClick={handleSubmit}
             isLoading={loading}
             >
-                Login
+                Đăng nhập
             </Button>
 
             <Button
@@ -115,7 +116,7 @@ const Login = () => {
                 setPassword("123456");
             }}
             >
-                Get Guest User Credentials
+                Dùng thử tài khoản có sẵn
             </Button>
         </VStack>
     )

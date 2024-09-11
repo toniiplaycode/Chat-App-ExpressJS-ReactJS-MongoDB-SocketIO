@@ -32,7 +32,7 @@ const SideDrawer = () => {
     const handleSearch = async () => {
         if(search.trim().length === 0) {
             toast({
-                title: "Please enter somthings in search !",
+                title: "Nhập tên hoặc email người dùng cần tìm !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -55,7 +55,7 @@ const SideDrawer = () => {
             setLoading(false);
         } catch (error) {
             toast({
-                title: "Search failed !",
+                title: "Tìm kiếm thất bại !",
                 status: "error",
                 duration: 3000,
                 position: "top-right"
@@ -85,7 +85,7 @@ const SideDrawer = () => {
             onClose(); 
         } catch (error) {
             toast({
-                title: "Access chat failed !",
+                title: "Truy cập trò chuyện thất bại",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -105,11 +105,11 @@ const SideDrawer = () => {
                 p={"5px 10px"}
                 borderWidth={"5px"}
             >
-                <Tooltip label="Search users to chat" hasArrow placement="bottom-end">
+                <Tooltip label="Tìm người dùng để trò chuyện" hasArrow placement="bottom-end">
                     <Button onClick={onOpen}>
                         <i className="fa-solid fa-magnifying-glass"></i>
                         <Text display={{ base: "none", md: "flex" }} px="6px">
-                            Search user
+                            Tìm người dùng
                         </Text>
                     </Button>
                 </Tooltip>
@@ -130,7 +130,7 @@ const SideDrawer = () => {
                             </a>
                         </MenuButton>
                         <MenuList pl={"5px"}>
-                            {!notification.length && "No new messages"}
+                            {!notification.length && "Không có tin nhắn mới"}
                             {notification.map((notif) => (
                                 <MenuItem
                                     key={notif._id}
@@ -140,8 +140,8 @@ const SideDrawer = () => {
                                     }}
                                 >
                                     {notif.chat.isGroupChat 
-                                    ? `New message in ${notif.chat.chatName}`
-                                    : `New message from ${getSender(user, notif.chat.users)}`
+                                    ? `Tin nhắn mới từ ${notif.chat.chatName}`
+                                    : `Tin nhắn mới từ ${getSender(user, notif.chat.users)}`
                                     }      
                                 </MenuItem>
                             ))}
@@ -158,10 +158,10 @@ const SideDrawer = () => {
                         </MenuButton>
                         <MenuList>
                             <ProfileModal user={user}>
-                                <MenuItem>My Profile</MenuItem>
+                                <MenuItem>Hồ sơ của tôi</MenuItem>
                             </ProfileModal>
                             <MenuDivider/>
-                            <MenuItem onClick={logoutHandle}>Log out</MenuItem>
+                            <MenuItem onClick={logoutHandle}>Đăng xuất</MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
@@ -175,7 +175,7 @@ const SideDrawer = () => {
                 <DrawerOverlay />
                     <DrawerContent>
                         <DrawerCloseButton />
-                        <DrawerHeader>Search users</DrawerHeader>
+                        <DrawerHeader>Tìm người dùng</DrawerHeader>
 
                         <DrawerBody>
                             <Box display={"flex"} pb={"10px"}>
@@ -187,7 +187,7 @@ const SideDrawer = () => {
                                         e.key === "Enter" && handleSearch()
                                     }}
                                 />
-                                <Button ml={"10px"} onClick={handleSearch}>Go</Button>
+                                <Button ml={"10px"} onClick={handleSearch}>Tìm</Button>
                             </Box>
 
                             {loading ? (

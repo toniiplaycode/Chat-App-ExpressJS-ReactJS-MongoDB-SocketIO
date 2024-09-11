@@ -35,8 +35,8 @@ const HomePage = () => {
             >
                 <Tabs variant='soft-rounded' colorScheme='blue'>
                     <TabList>
-                        <Tab w={"50%"}>Login</Tab>
-                        <Tab w={"50%"}>Sign up</Tab>
+                        <Tab w={"50%"}>Đăng nhập</Tab>
+                        <Tab w={"50%"}>Đăng ký</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>

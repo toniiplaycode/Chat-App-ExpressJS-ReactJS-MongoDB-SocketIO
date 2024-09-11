@@ -25,7 +25,7 @@ const UserBadgeItem = ({user, handleFunction}) => {
             >
                 
                 { 
-                    user?._id === selectedChat?.groupAdmin._id 
+                    user?._id === selectedChat?.groupAdmin?._id 
                     ?
                         <StarIcon
                             boxSize={3}

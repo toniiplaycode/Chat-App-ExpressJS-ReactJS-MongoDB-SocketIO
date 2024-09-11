@@ -24,7 +24,7 @@ const DialogConfirm = ({isOpenDialog, setIsOpenDialog, handleFunction}) => {
           <AlertDialogOverlay />
   
           <AlertDialogContent>
-            <AlertDialogHeader>Remove from group ?</AlertDialogHeader>
+            <AlertDialogHeader>Mời khỏi nhóm</AlertDialogHeader>
             <AlertDialogCloseButton />
             <AlertDialogFooter>
               <Button 
@@ -33,7 +33,7 @@ const DialogConfirm = ({isOpenDialog, setIsOpenDialog, handleFunction}) => {
                   setIsOpenDialog(false);
                 }}
               >
-                No
+                Huỷ
               </Button>
               <Button
                 colorScheme='red' 
@@ -43,7 +43,7 @@ const DialogConfirm = ({isOpenDialog, setIsOpenDialog, handleFunction}) => {
                   handleFunction();
                 }} ml={3}
               >
-                Yes
+                Chấp nhận
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

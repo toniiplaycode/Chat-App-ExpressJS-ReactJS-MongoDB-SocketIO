@@ -55,7 +55,7 @@ const SingleChat = () => {
             socket.emit("join chat", selectedChat._id); // gọi join chat từ server
         } catch (error) {
             toast({
-                title: "Fetch message failed !",
+                title: "Fetch tin nhắn thất bại",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -136,7 +136,7 @@ const SingleChat = () => {
                 setFetchAgain(!fetchAgain)
             } catch (error) {
                 toast({
-                    title: "Send message failed !",
+                    title: "Gửi tin nhắn thất bại !",
                     description: error.message,
                     status: "error",
                     duration: 3000,
@@ -271,7 +271,7 @@ const SingleChat = () => {
                         ) 
                         : (
                             <div className="messages">
-                                <ScrollableChat messages={messages} selectedChat={selectedChat} />
+                                <ScrollableChat messages={messages}/>
                             </div>
                         )
                         }

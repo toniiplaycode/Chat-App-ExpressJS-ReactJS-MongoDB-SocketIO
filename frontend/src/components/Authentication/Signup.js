@@ -20,7 +20,7 @@ const Signup = () => {
         setLoading(true);
         if(pic === undefined) {
             toast({
-                title: 'Please select an image',
+                title: 'Vui lòng thêm ảnh !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -49,7 +49,7 @@ const Signup = () => {
             })
         }else{
             toast({
-                title: 'Please select an image',
+                title: 'Vui lòng thêm ảnh !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -64,7 +64,7 @@ const Signup = () => {
         setLoading(true);
         if(!name || !email || !password || !confirmPassword){
             toast({
-                title: 'Please fill all feilds !',
+                title: 'Vui lòng nhập đủ thông tin !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -75,7 +75,7 @@ const Signup = () => {
 
         if(password !== confirmPassword){
             toast({
-                title: 'Passsword do not match !',
+                title: 'Mật khẩu nhập lại không trùng !',
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -97,7 +97,7 @@ const Signup = () => {
 
             if(data.registerUser === false) {
                 toast({
-                    title: 'User Existed, please use another email !',
+                    title: 'Email đã được sử dụng, hãy dùng email khác !',
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
@@ -108,7 +108,7 @@ const Signup = () => {
                 localStorage.setItem("userChatApp", JSON.stringify(data));
              
                 toast({
-                    title: 'Registration successfully !',
+                    title: 'Đăng ký thành công !',
                     status: 'success',
                     duration: 3000,
                     isClosable: true,
@@ -119,7 +119,7 @@ const Signup = () => {
             }
         } catch (error) {
             toast({
-                title: 'Error Occured',
+                title: 'Đã xảy ra lỗi !',
                 description: error.response.data.message,
                 status: 'error',
                 duration: 3000,
@@ -132,9 +132,9 @@ const Signup = () => {
     return(
         <VStack spacing={4}>
             <FormControl isRequired>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Tên</FormLabel>
                 <Input 
-                    placeholder='Enter your name'
+                    placeholder='Nhập tên của bạn'
                     onChange={(e)=>setName(e.target.value)}
                 />
             </FormControl>
@@ -143,13 +143,13 @@ const Signup = () => {
                 <FormLabel>Email</FormLabel>
                 <Input 
                     type='email'
-                    placeholder='Enter your email'
+                    placeholder='Nhập email của bạn'
                     onChange={(e)=>setEmail(e.target.value)}
                 />
             </FormControl>
             
             <FormControl isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Mật khẩu</FormLabel>
                 <InputGroup>
                     <Input 
                         type={showPassword ? "password" : "text"}
@@ -164,7 +164,7 @@ const Signup = () => {
             </FormControl>
             
             <FormControl isRequired>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>Nhập lại mật khẩu</FormLabel>
                 <InputGroup>
                     <Input 
                         type={showConfirmPassword ? "password" : "text"}
@@ -179,7 +179,7 @@ const Signup = () => {
             </FormControl>
             
             <FormControl isRequired>
-                <FormLabel>Upload your picture</FormLabel>
+                <FormLabel>Tải ảnh đại diện</FormLabel>
                 <Input 
                     type='file'
                     accept='image/*'
@@ -195,7 +195,7 @@ const Signup = () => {
             onClick={handleSubmit}
             isLoading={loading}
             >
-                Sign Up
+                Đăng ký
             </Button>
         </VStack>
     )

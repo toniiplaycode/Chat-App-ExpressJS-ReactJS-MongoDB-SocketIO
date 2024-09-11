@@ -36,7 +36,7 @@ const GroupChatModal = ({children}) => {
             setLoading(false);
         } catch (error) {
             toast({
-                title: "Search users failed !",
+                title: "Tìm người dùng thất bại !",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -48,7 +48,7 @@ const GroupChatModal = ({children}) => {
     const addToGroup = (userAdded) => {
         if(selectedUsers.includes(userAdded)) {
             toast({
-                title: "User already added !",
+                title: "Người dùng đã được thêm vào !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -66,7 +66,7 @@ const GroupChatModal = ({children}) => {
     const handleSubmit = async () => {
         if(!groupChatName || !setSelectedUsers) {
             toast({
-                title: "Please fill all the  feilds !",
+                title: "Vui lòng điền đủ thông tin !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -88,7 +88,7 @@ const GroupChatModal = ({children}) => {
             setChats([...chats, data]); 
             onClose();
             toast({
-                title: "Create chat success",
+                title: "Tạo thành công !",
                 status: "success",
                 duration: 3000,
                 position: "top-right"
@@ -96,7 +96,7 @@ const GroupChatModal = ({children}) => {
             return;
         } catch (error) {
             toast({
-                title: "Create chat failed !",
+                title: "Tạo thất bại !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -113,7 +113,7 @@ const GroupChatModal = ({children}) => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader textAlign={"center"} fontSize={"2xl"}>Create group chat</ModalHeader>
+                    <ModalHeader textAlign={"center"} fontSize={"2xl"}>Tạo nhóm trò chuyện</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody
                         display={"flex"}
@@ -121,12 +121,12 @@ const GroupChatModal = ({children}) => {
                     >
                         <FormControl>
                             <Input 
-                                placeholder="Group name"
+                                placeholder="Tên nhóm"
                                 mb={3}
                                 onChange={(e) => setGroupChatName(e.target.value)}
                             />
                             <Input 
-                                placeholder="Add users: Toan, Tonii,..."
+                                placeholder="Thêm người dùng: Toan, Tonii,..."
                                 mb={3}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
@@ -162,7 +162,7 @@ const GroupChatModal = ({children}) => {
 
                     <ModalFooter>
                         <Button colorScheme='blue' onClick={handleSubmit}>
-                            Create
+                            Tạo
                         </Button>
                     </ModalFooter>
                 </ModalContent>

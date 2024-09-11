@@ -21,7 +21,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const removeUser = async (userRemoved) => {
         if(selectedChat.groupAdmin._id !== user._id && userRemoved._id !== user._id) {
             toast({
-                title: "Only admin can remove someone !",
+                title: "Chỉ trưởng nhóm mới có thể mời ai đó rời nhóm !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -62,7 +62,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
             setLoading(false);
         } catch (error) {
             toast({
-                title: "Remove user failed !",
+                title: "Mời người dùng khỏi nhóm thất bại !",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -74,7 +74,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const handleRename = async () => {
         if(!groupChatName) {
             toast({
-                title: "Field rename empty !",
+                title: "Ô đổi tên nhóm không được để trống !",
                 status: "error",
                 duration: 3000,
                 position: "top-right"
@@ -101,14 +101,14 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
             setRenameLoading(false);
 
             toast({
-                title: "Rename successed",
+                title: "Đổi tên thành công !",
                 status: "success",
                 duration: 3000,
                 position: "top-right"
             })
         } catch (error) {
             toast({
-                title: "Rename failed !",
+                title: "Đổi tên thất bại !",
                 status: "error",
                 duration: 3000,
                 position: "top-right"
@@ -136,7 +136,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
             setLoading(false);
         } catch (error) {
             toast({
-                title: "Search users failed !",
+                title: "Tìm kiếm người dùng thất bại !",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -148,7 +148,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const addToGroup = async (userAdded) => {
         if(selectedChat.users.find(user => user._id === userAdded._id)) {
             toast({
-                title: "User already added !",
+                title: "Người dùng đã được thêm !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -158,7 +158,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
         if(selectedChat.groupAdmin._id !== user._id) {
             toast({
-                title: "Only admin can add someone !",
+                title: "Chỉ trưởng nhóm mới thể thêm ai đó vào nhóm !",
                 status: "warning",
                 duration: 3000,
                 position: "top-right"
@@ -188,7 +188,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
             setLoading(false);
         } catch (error) {
             toast({
-                title: "Add user failed !",
+                title: "Thêm người dùng thất bại !",
                 description: error.message,
                 status: "error",
                 duration: 3000,
@@ -226,7 +226,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
                         <FormControl display={"flex"}>
                             <Input
-                                placeholder = "Rename chat"
+                                placeholder = "Đổi tên nhóm"
                                 mb={3}
                                 value={groupChatName}
                                 onChange={(e)=>setGroupChatName(e.target.value)}
@@ -236,13 +236,13 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
                                 isLoading={renameLoading}
                                 onClick={handleRename}
                             >
-                                Update
+                                Cập nhật
                             </Button>
                         </FormControl>
                         
                         <FormControl>
                             <Input 
-                                placeholder="Add users: Toan, Tonii,..."
+                                placeholder="Thêm người dùng: Toan, Tonii,..."
                                 mb={3}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
@@ -264,7 +264,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
                     <ModalFooter>
                         <Button colorScheme='red' mr={3} onClick={()=>removeUser(user)}>
-                            Leave Group
+                            Rời nhóm
                         </Button>
                     </ModalFooter>
                 </ModalContent>
