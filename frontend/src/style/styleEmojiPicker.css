@@ -1,0 +1,23 @@
+/* Styles for Emoji Picker */
+.emoji-picker-container {
+    position: relative;
+    margin-right: 2px;
+}
+
+.emoji-icon {
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.emoji-picker-popup {
+    width: 350px;
+    height: 320px; 
+    position: absolute;
+    bottom: 100%;
+    left:0;
+    z-index: 1000;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
