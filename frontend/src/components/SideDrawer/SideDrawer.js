@@ -110,7 +110,6 @@ const SideDrawer = () => {
                         </Text>
                     </Button>
                 </Tooltip>
-                <Text fontSize={"2xl"}>Chat App</Text>
                 <Box display={"flex"}>
                     <Menu>
                         <MenuButton mx={"10px"}>

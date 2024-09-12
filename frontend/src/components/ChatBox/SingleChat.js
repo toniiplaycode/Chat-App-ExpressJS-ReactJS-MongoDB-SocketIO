@@ -96,13 +96,14 @@ const SingleChat = () => {
                 // nếu chat đó chưa có trong notification thì mới thêm 
                 if (!chatExists) {
                     setNotification([...notification, newMessageRecived]);
-                    setFetchAgain(!fetchAgain);
                 }
-
+                
                 recievedNotifyBrowserNewMessage(newMessageRecived);
             } else {
                 setMessages([...messages, newMessageRecived]);
             }
+
+            setFetchAgain(!fetchAgain);
         });
     
         // Cleanup
@@ -120,7 +121,6 @@ const SingleChat = () => {
                         icon: newMessageRecived.sender.pic
                     });
                 } else {
-                    console.log(newMessageRecived);
                     new Notification(newMessageRecived.chat.chatName, {
                         body: newMessageRecived.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : newMessageRecived.content, 
                         icon: "group.png"
@@ -150,8 +150,6 @@ const SingleChat = () => {
                     chatId: selectedChat._id,
                 }, config);          
                 
-                // console.log(data);
-
                 socket.emit("new message", data);
                 setMessages([...messages, data]);
                 setIsClickSend(false);

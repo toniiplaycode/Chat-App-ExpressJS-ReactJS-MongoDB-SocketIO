@@ -13,10 +13,10 @@
     width: 350px;
     height: 320px; 
     position: absolute;
-    bottom: 100%;
-    left:0;
+    bottom: 32px;
+    left: -40px;    
     z-index: 1000;
-    background: white;
+    background: white !important;
     border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;

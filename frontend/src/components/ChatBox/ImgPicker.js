@@ -30,12 +30,22 @@ const ImgPicker = ({fetchMessages}) => {
   };
 
   const handleFileChange = (e) => {
-    if(e !== undefined){
-      setSelectedImageUrl(URL?.createObjectURL(e.target.files[0])) ;
-      setSelectedImageFile(e.target.files[0]);
-      setIsOpenImgPicker(true); 
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImageUrl(URL.createObjectURL(file));
+      setSelectedImageFile(file);
+      setIsOpenImgPicker(true);
+    } else {
+      console.error('No file selected');
     }
   };
+  
+  useEffect(()=>{
+    if(!isOpenImgPicker) {
+      setSelectedImageUrl(null);
+      setSelectedImageFile(null);
+    }
+  },[isOpenImgPicker]);
 
   const handleSendImg = () => {
       setLoading(true);

@@ -1,5 +1,3 @@
-import { UnorderedList } from "@chakra-ui/react";
-
 export const getSender = (loggedUser, users) => {
     return users[0]?._id === loggedUser?._id ? users[1]?.name : users[0]?.name; 
 }
@@ -21,13 +19,19 @@ export const isSameSender = (messages, m, i, userId) => {
 };
 
 export const isLastMessage = (messages, i, userId) => {
-  // console.log(messages);
   return (
     i === messages.length - 1 &&
     messages[messages.length - 1].sender._id !== userId
-    
+
   );
 };
+
+// hiển thị tên người dùng trên tin nhắn đầu tiên trong nhóm, không hiển thị tên của người đang nhắn
+export const isEarliestMessage = (messages, i, userId) => {
+  return (
+    (messages[i]?.sender._id !== messages[i-1]?.sender._id) && (messages[i]?.sender._id !== userId)
+  )
+} 
 
 // canh trái cho tin nhắn tin người gửi, canh phải cho tin nhắn người nhận
 export const isSameSenderMargin = (messages, m, i, userId) => { 
@@ -140,11 +144,11 @@ const subtractDays = (date1, date2) => {
 
 export const whoIsSendMessage = (chat, loggedUser) => {
     const lastestMessage = chat?.lastestMessage;
-    if(lastestMessage?.sender._id == loggedUser?._id) {
+    if(lastestMessage?.sender._id == loggedUser?._id) { // nếu chính bạn là người gửi
       return `Bạn: ${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content} `
-    } else if(chat.isGroupChat) {
+    } else if(chat.isGroupChat) { // nếu là trong 1 group chat
       return `${lastestMessage?.sender?.name}: ${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content}`
-    } else if(lastestMessage != undefined){
+    } else if(lastestMessage != undefined){ 
       return `${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content}`
     }
   }

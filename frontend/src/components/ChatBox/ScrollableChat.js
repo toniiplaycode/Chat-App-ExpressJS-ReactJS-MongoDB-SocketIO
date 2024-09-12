@@ -1,7 +1,7 @@
 import ScrollableFeed from 'react-scrollable-feed'; // dùng ScrollableFeed để khi có thêm message mới được gửi thì nó tự động scroll
 import { ChatState } from '../../Context/ChatProvider';
-import { Avatar, Box, Tooltip } from '@chakra-ui/react';
-import { getSender, isLastMessage, isSameSender, isSameSenderMargin, isSameUser, showDateOfLastestMessages, showTimeMessageSended } from '../../handleLogic/ChatLogic';
+import { Avatar, Box, Text, Tooltip } from '@chakra-ui/react';
+import { getSender, isEarliestMessage, isLastMessage, isSameSender, isSameSenderMargin, isSameUser, showDateOfLastestMessages, showTimeMessageSended } from '../../handleLogic/ChatLogic';
 import { StarIcon } from "@chakra-ui/icons";
  
 const ScrollableChat = ({messages}) => {
@@ -52,48 +52,53 @@ const ScrollableChat = ({messages}) => {
                         { (isSameSender(messages, m, i, user._id)
                         || isLastMessage(messages, i, user._id)) && 
                         (
-                            <div
-                                style={{
-                                    position: "relative"
-                                }}
-                            >
-                                <Tooltip
-                                label={m.sender.name}
-                                placement="bottom-start"
-                                hasArrow
-                                >
-                                    <Avatar
-                                        mt={"-5px"}
-                                        mr={1}
-                                        size={"sm"}
-                                        cursor={"pointer"}
-                                        name={m.sender.name}
-                                        src={m.sender.pic}
-                                        />
-                                </Tooltip>
-                                
+                            <Avatar
+                                mt={"-5px"}
+                                mr={1}
+                                size={"sm"}
+                                cursor={"pointer"}
+                                name={m.sender.name}
+                                src={m.sender.pic}
+                                position={"relative"}
+                            > 
+                            
                                 {selectedChat.groupAdmin &&
                                 m.sender._id === selectedChat.groupAdmin._id && (
                                     <StarIcon
                                         boxSize={3}
                                         style={{
                                             position: 'absolute',
-                                            bottom: '16',
+                                            bottom: '-2',
                                             left: '20',
                                         }}
                                     />
                                 )}
-                            </div>
-                            
+                            </Avatar>
                         )
-                    }
+                        }
                         
                         <Box
                             marginLeft={isSameSenderMargin(messages, m, i, user._id)}
                             // marginTop: isSameUser(messages, m, i) ? 3 : 10,
                             maxWidth={{base: "250px", sm: "420px"}}
                             textWrap={"wrap"}
+                            position={"relative"}
                         >
+                            
+                            {selectedChat.groupAdmin && isEarliestMessage(messages, i, user._id)
+                            &&
+                            <Text
+                                style={{
+                                    fontSize: "12px",
+                                    position: "absolute",
+                                    top: "-20px",
+                                    fontWeight: "bold"
+                                }}
+                            >
+                                {m.sender.name} 
+                            </Text>
+                            }
+
                             {m.content.split(":")[0] === "http" 
                             ? 
                                 <img
@@ -118,6 +123,7 @@ const ScrollableChat = ({messages}) => {
                                     {m.content}
                                 </span>
                             }
+
                             <p
                                 style={{
                                     textAlign: `${

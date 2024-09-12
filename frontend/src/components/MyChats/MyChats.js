@@ -41,7 +41,6 @@ const MyChats = () => {
         fetchChats();
     }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
 
-
     return(
         <Box
             display={{base: selectedChat ? "none" : "flex", md: "flex"}}
@@ -64,6 +63,7 @@ const MyChats = () => {
                 <GroupChatModal>
                     <Button>Tạo nhóm +</Button>
                 </GroupChatModal>
+                <Text fontSize={20}>Đoạn chat</Text>
             </Box>
 
             <Box
