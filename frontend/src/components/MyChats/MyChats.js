@@ -3,12 +3,13 @@ import { ChatState } from "../../Context/ChatProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
-import { countTimeSend, formatTime, getSender, getSenderFull, showDateOfLastestMessages } from "../../handleLogic/ChatLogic";
+import { countTimeSend, formatTime, getSender, getSenderFull, whoIsSendMessage } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
+import { NotAllowedIcon } from "@chakra-ui/icons";
 
 const MyChats = () => {
     const [loggedUser, setLoggedUser] = useState();
-    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain } = ChatState();
+    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain, setIsOpenEmojiPicker, setIsOpenImgPicker } = ChatState();
 
     const toast = useToast();
 
@@ -40,6 +41,7 @@ const MyChats = () => {
         fetchChats();
     }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
 
+
     return(
         <Box
             display={{base: selectedChat ? "none" : "flex", md: "flex"}}
@@ -47,7 +49,7 @@ const MyChats = () => {
             alignItems={"center"}
             p={3}
             bg={"white"}
-            w={{base: "100%", md: "400px"}}
+            w={{base: "100%", md: "500px"}}
             borderRadius={"lg"}
             borderWidth={"1px"}
         >
@@ -75,11 +77,15 @@ const MyChats = () => {
                 overflowY={"hidden"}
             >
                 {chats ? (
-                    <Stack overflowY={"scroll"}>
+                    <Stack 
+                        overflowY={"scroll"}
+                    >
                         {chats.map((chat) => (
                             <Box
                                 key={chat._id}
                                 onClick={() => {
+                                    setIsOpenEmojiPicker(false);
+                                    setIsOpenImgPicker(false);
                                     setSelectedChat(chat)
                                     setNotification(notification.filter(n => n.chat._id != chat._id));
                                 }}
@@ -87,6 +93,7 @@ const MyChats = () => {
                                 bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8"}
                                 px={3}
                                 py={3}
+                                mr={0.5}
                                 borderRadius="lg"
                                 display={"flex"}
                                 alignItems={"center"}
@@ -117,14 +124,12 @@ const MyChats = () => {
                                     </Text>
                                     <Text
                                         fontSize={"12px"}                                        
-                                        maxWidth={{base: "100px", sm: "250px", md:"180px"}}
+                                        maxWidth={{base: "100px", sm: "250px", md:"160px"}}
                                         overflow={"hidden"}
                                         whiteSpace={"nowrap"}
                                         textOverflow={"ellipsis"}
                                     >
-                                         {chat?.lastestMessage?.sender?._id == loggedUser._id 
-                                         ? "Bạn: " + chat?.lastestMessage?.content 
-                                         : chat?.lastestMessage?.content}
+                                        {whoIsSendMessage(chat, loggedUser)}
                                     </Text>
                                 </Box>
                                 {

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, FormControl, IconButton, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import { ArrowBackIcon, ChevronRightIcon, NotAllowedIcon } from "@chakra-ui/icons"
 import { ChatState } from "../../Context/ChatProvider";
 import { getSender, getSenderFull } from "../../handleLogic/ChatLogic";
@@ -11,11 +11,13 @@ import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Lottie from 'react-lottie';
 import animationData from '../../animations/typing_animation.json'
+import EmojiPicker from './EmojiPicker';
+import ImgPicker from "./ImgPicker";
 
 let socket, selectedChatCompare;
 
 const SingleChat = () => {
-    const { user, selectedChat, setSelectedChat, notification, setNotification, fetchAgain, setFetchAgain } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification, fetchAgain, setFetchAgain, setIsOpenEmojiPicker, setIsOpenImgPicker } = ChatState();
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ const SingleChat = () => {
           preserveAspectRatio: 'xMidYMid slice'
         }
     };
-
+    
     const fetchMessages = async (e) => {
         if(!selectedChat) return;
         
@@ -96,6 +98,8 @@ const SingleChat = () => {
                     setNotification([...notification, newMessageRecived]);
                     setFetchAgain(!fetchAgain);
                 }
+
+                recievedNotifyBrowserNewMessage(newMessageRecived);
             } else {
                 setMessages([...messages, newMessageRecived]);
             }
@@ -106,6 +110,25 @@ const SingleChat = () => {
             socket.off("message recieved");
         };
     }, [fetchAgain, messages, socket]);
+
+    const recievedNotifyBrowserNewMessage = (newMessageRecived) => { // hàm nhận thông báo về thiết bị từ browswer, cả 2 room chat phải đều mở mới nhận được thông báo
+        Notification.requestPermission().then(perm => {
+            if(perm == "granted") {
+                if(newMessageRecived.chat.chatName == "sender") {
+                    new Notification(newMessageRecived.sender.name, {
+                        body: newMessageRecived.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : newMessageRecived.content, 
+                        icon: newMessageRecived.sender.pic
+                    });
+                } else {
+                    console.log(newMessageRecived);
+                    new Notification(newMessageRecived.chat.chatName, {
+                        body: newMessageRecived.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : newMessageRecived.content, 
+                        icon: "group.png"
+                    });
+                }
+            }
+        })
+    }
     
     const sendMessage = async () => {
         if(newMessage.trim().length > 0) {
@@ -185,6 +208,10 @@ const SingleChat = () => {
             }
         }, timerLength);
     }
+
+    const handleEmojiSelect = (emoji) => {
+        setNewMessage(newMessage + emoji);
+    };
 
     return(
         <>
@@ -270,7 +297,12 @@ const SingleChat = () => {
                             <Spinner size={"xl"} m={"auto"} display={"block"}/>
                         ) 
                         : (
-                            <div className="messages">
+                            <div className="messages"
+                                onClick={()=>{
+                                    setIsOpenEmojiPicker(false);
+                                    setIsOpenImgPicker(false);
+                                }}
+                            >
                                 <ScrollableChat messages={messages}/>
                             </div>
                         )
@@ -301,6 +333,14 @@ const SingleChat = () => {
                             paddingTop={"12px"}
                             gap={"5px"}
                         >
+                            <Box
+                                display={"flex"}
+                                alignItems={"center"}
+                            >
+                                <ImgPicker fetchMessages={fetchMessages}/>
+                                <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                            </Box>
+                            
                             <FormControl
                                 onKeyDown={enterToSend}
                                 isRequired
@@ -310,7 +350,12 @@ const SingleChat = () => {
                                     placeholder="Enter a message..."
                                     value={newMessage}
                                     onChange={typingHandle}
+                                    onClick={()=>{
+                                        setIsOpenEmojiPicker(false);
+                                        setIsOpenImgPicker(false);
+                                    }}
                                 />
+
                             </FormControl>
 
                             <IconButton

@@ -1,5 +1,7 @@
+import { UnorderedList } from "@chakra-ui/react";
+
 export const getSender = (loggedUser, users) => {
-    return users[0]._id === loggedUser?._id ? users[1]?.name : users[0]?.name; 
+    return users[0]?._id === loggedUser?._id ? users[1]?.name : users[0]?.name; 
 }
 
 export const getSenderFull = (loggedUser, users) => {
@@ -83,12 +85,12 @@ export const countTimeSend = (timeMessageSend) => {
   const getSubtractTime = subtractTime(timeCurrentGetTime, timeMessageSendGetTime);
   const getSubtractDay = subtractDays(timeCurrentGetDate, timeMessageSendGetDate);
 
-  if(getSubtractDay == 1) {
+  if(getSubtractDay === 1) {
     return "Hôm qua"
-  } else if(getSubtractDay == 0) {
+  } else if(getSubtractDay === 0) {
     const time = getSubtractTime;
-    if(time.split(":")[0] == "00") {
-      if(time.split(":")[1] == "00") {
+    if(time.split(":")[0] === "00") {
+      if(time.split(":")[1] === "00") {
         return "Vài giây"
       } else return time.split(":")[1] + " phút" // lấy phút
     } else {
@@ -121,7 +123,7 @@ const subtractTime = (time1, time2) => {
 }
 
 const subtractDays = (date1, date2) => {
-  if(date1 != undefined && date2 != undefined) {
+  if(date1 !== undefined && date2 !== undefined) {
     // Chuyển đổi từ dd/mm/yyyy sang đối tượng Date
     const [day1, month1, year1] = date1?.split('/');
     const [day2, month2, year2] = date2?.split('/');
@@ -136,3 +138,13 @@ const subtractDays = (date1, date2) => {
 }
 
 
+export const whoIsSendMessage = (chat, loggedUser) => {
+    const lastestMessage = chat?.lastestMessage;
+    if(lastestMessage?.sender._id == loggedUser?._id) {
+      return `Bạn: ${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content} `
+    } else if(chat.isGroupChat) {
+      return `${lastestMessage?.sender?.name}: ${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content}`
+    } else if(lastestMessage != undefined){
+      return `${lastestMessage?.content.split(":")[0] === "http" ? "Đã gửi 1 ảnh" : lastestMessage?.content}`
+    }
+  }

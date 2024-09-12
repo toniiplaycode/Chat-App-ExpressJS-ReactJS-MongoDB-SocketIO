@@ -84,6 +84,17 @@ const Signup = () => {
             return;
         }
 
+        if(password.length < 8) {
+            toast({
+                title: 'Mật khẩu phải hơn 8 ký tự!',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLoading(false);
+            return;
+        }
+
         try {
             const config = {
                 headers: {

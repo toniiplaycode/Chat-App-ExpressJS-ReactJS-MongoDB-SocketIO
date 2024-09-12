@@ -14,6 +14,24 @@
   background:#cccccc;
 }
 
+/* The scrollbar */
 ::-webkit-scrollbar {
-   width: 0px;
+  width: 4px; /* Width of the scrollbar */
+  height: 4px; /* Height of the scrollbar (for horizontal scrollbars) */
+}
+
+/* The track (part of the scrollbar that the thumb slides within) */
+::-webkit-scrollbar-track {
+  color: #333;
+}
+
+/* The draggable part of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the draggable part */
+  border-radius: 10px; /* Rounded corners for the draggable part */
+}
+
+/* The draggable part on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color on hover */
 }

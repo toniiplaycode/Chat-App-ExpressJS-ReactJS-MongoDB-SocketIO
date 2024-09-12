@@ -153,6 +153,7 @@ const GroupChatModal = ({children}) => {
                                     key={user._id}
                                     user={user}
                                     handleFunction={()=>addToGroup(user)}
+                                    showButtonAddUserGroup={true}
                                 />
                             ))
                         )

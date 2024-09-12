@@ -1,6 +1,6 @@
 import ScrollableFeed from 'react-scrollable-feed'; // dùng ScrollableFeed để khi có thêm message mới được gửi thì nó tự động scroll
 import { ChatState } from '../../Context/ChatProvider';
-import { Avatar, Tooltip } from '@chakra-ui/react';
+import { Avatar, Box, Tooltip } from '@chakra-ui/react';
 import { getSender, isLastMessage, isSameSender, isSameSenderMargin, isSameUser, showDateOfLastestMessages, showTimeMessageSended } from '../../handleLogic/ChatLogic';
 import { StarIcon } from "@chakra-ui/icons";
  
@@ -44,7 +44,10 @@ const ScrollableChat = ({messages}) => {
 
                     <div
                         key={m._id} 
-                        style={{display: "flex"}} 
+                        style={{
+                            display: "flex",
+                            marginRight: "2px"
+                        }} 
                         >
                         { (isSameSender(messages, m, i, user._id)
                         || isLastMessage(messages, i, user._id)) && 
@@ -85,23 +88,36 @@ const ScrollableChat = ({messages}) => {
                         )
                     }
                         
-                        <div
-                            style={{
-                                marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                                // marginTop: isSameUser(messages, m, i) ? 3 : 10,
-                            }}
-                            >
-                            <span
-                                style={{
-                                    background: `${
-                                        m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
-                                    }`,
-                                    borderRadius: "10px",
-                                    padding: "5px 6px",
-                                }}
-                                >
-                                {m.content}
-                            </span>
+                        <Box
+                            marginLeft={isSameSenderMargin(messages, m, i, user._id)}
+                            // marginTop: isSameUser(messages, m, i) ? 3 : 10,
+                            maxWidth={{base: "250px", sm: "420px"}}
+                            textWrap={"wrap"}
+                        >
+                            {m.content.split(":")[0] === "http" 
+                            ? 
+                                <img
+                                    style={{
+                                        width: "200px",
+                                        background: "#cccccc",
+                                        borderRadius: "10px",
+                                        padding: "5px 6px",
+                                    }}
+                                    src={m.content}
+                                /> 
+                            : 
+                                <span
+                                    style={{
+                                        background: `${
+                                            m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
+                                        }`,
+                                        borderRadius: "10px",
+                                        padding: "5px 6px",
+                                    }}
+                                    >
+                                    {m.content}
+                                </span>
+                            }
                             <p
                                 style={{
                                     textAlign: `${
@@ -113,7 +129,7 @@ const ScrollableChat = ({messages}) => {
                                     >
                                 { showTimeMessageSended(messages, m, i) }
                             </p>
-                        </div>
+                        </Box>
                     </div>
                 </>
             ))}

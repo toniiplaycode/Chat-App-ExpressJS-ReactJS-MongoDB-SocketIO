@@ -13,6 +13,7 @@ import "../../style/styleNotification.css";
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
+    const [emptySearch, setEmptySearch] = useState();
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
@@ -30,16 +31,6 @@ const SideDrawer = () => {
     }
 
     const handleSearch = async () => {
-        if(search.trim().length === 0) {
-            toast({
-                title: "Nhập tên hoặc email người dùng cần tìm !",
-                status: "warning",
-                duration: 3000,
-                position: "top-right"
-            })
-            return;
-        }
-
         try {
             setLoading(true);
 
@@ -53,13 +44,19 @@ const SideDrawer = () => {
 
             setSearchResult(data);
             setLoading(false);
+            if((data?.length == 0 || data == undefined)) {
+                setEmptySearch("Không tìm thấy người dùng !");
+            } else {
+                setEmptySearch();
+            }
         } catch (error) {
-            toast({
-                title: "Tìm kiếm thất bại !",
-                status: "error",
-                duration: 3000,
-                position: "top-right"
-            })
+            // setEmptySearch("Không tìm thấy người dùng !");
+            // toast({
+            //     title: "Tìm kiếm thất bại !",
+            //     status: "error",
+            //     duration: 3000,
+            //     position: "top-right"
+            // })
         }
     }
 
@@ -180,14 +177,13 @@ const SideDrawer = () => {
                         <DrawerBody>
                             <Box display={"flex"} pb={"10px"}>
                                 <Input
-                                    placeholder="Search by name or email"
+                                    placeholder="Tìm bằng tên hoặc email"
                                     value={search}
-                                    onChange={(e)=>setSearch(e.target.value)}
-                                    onKeyDown={(e)=> {
-                                        e.key === "Enter" && handleSearch()
+                                    onChange={(e)=>{
+                                        setSearch(e.target.value)
+                                        handleSearch();
                                     }}
                                 />
-                                <Button ml={"10px"} onClick={handleSearch}>Tìm</Button>
                             </Box>
 
                             {loading ? (
@@ -199,9 +195,18 @@ const SideDrawer = () => {
                                         key={user._id}
                                         user={user}
                                         handleFunction={() => accessChat(user._id)}
+                                        showButtonAddUserGroup={false}
                                     />
                                 )
                             ) }
+
+
+                            {
+                            emptySearch && 
+                            <Text>
+                                {emptySearch}
+                            </Text> 
+                            }
 
                             {loadingChat && <Spinner m={"auto"} display={"block"} mt={"20px"}/>}  
                         </DrawerBody>
