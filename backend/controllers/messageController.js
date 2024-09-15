@@ -10,7 +10,11 @@ export const sendMessage = async (req, res) => {
     }
 
     const now = new Date();
-    const dateTime = now.toLocaleTimeString('en-GB', { hour12: false }) + " " + now.toLocaleDateString('en-GB');  // en-GB là format ngày/tháng/năm
+    const options = { 
+        hour12: false, 
+        timeZone: 'Asia/Ho_Chi_Minh', // Set the timezone to Vietnam Standard Time (UTC+7)
+    };
+    const dateTime = now.toLocaleTimeString('vi-VN', options) + " " + now.toLocaleDateString('vi-VN', options);  
 
     let newMessage = {
         sender: req.user._id,
