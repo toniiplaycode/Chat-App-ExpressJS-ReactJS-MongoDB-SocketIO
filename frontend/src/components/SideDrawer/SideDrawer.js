@@ -194,7 +194,6 @@ const SideDrawer = () => {
                                         key={user._id}
                                         user={user}
                                         handleFunction={() => accessChat(user._id)}
-                                        showButtonAddUserGroup={false}
                                     />
                                 )
                             ) }

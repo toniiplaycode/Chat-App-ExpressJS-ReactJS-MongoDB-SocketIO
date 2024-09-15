@@ -7,6 +7,8 @@ import { StarIcon } from "@chakra-ui/icons";
 const ScrollableChat = ({messages}) => {
     const { user, selectedChat } = ChatState();
 
+    console.log(selectedChat);
+
     return(
         <ScrollableFeed>
             {messages.length == 0 && 
@@ -15,7 +17,10 @@ const ScrollableChat = ({messages}) => {
                         textAlign: "center",
                     }}
                 >
-                    Hãy nhắn gì đó cho {getSender(user, selectedChat.users)}
+                    {selectedChat.chatName == "sender" 
+                    ? "Hãy nhắn gì đó cho " + getSender(user, selectedChat.users)
+                    : "Hãy nhắn gì đó trong nhóm " + selectedChat.chatName  }
+                    
                 </p>
             }
             {messages && messages.map((m, i) => (

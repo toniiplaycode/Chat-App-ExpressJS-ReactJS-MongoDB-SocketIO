@@ -122,6 +122,7 @@ const MyChats = () => {
                                         ? getSender(loggedUser, chat.users)
                                         : chat.chatName} 
                                     </Text>
+                                    {chat.lastestMessage && 
                                     <Text
                                         fontSize={"12px"}                                        
                                         maxWidth={{base: "100px", sm: "250px", md:"160px"}}
@@ -131,6 +132,7 @@ const MyChats = () => {
                                     >
                                         {whoIsSendMessage(chat, loggedUser)}
                                     </Text>
+                                    }
                                 </Box>
                                 {
                                     notification.map((m) => {

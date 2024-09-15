@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
 
-const UserListItem = ({user, handleFunction, showButtonAddUserGroup}) => {
+const UserListItem = ({user, handleFunction}) => {
     return(
         <Box
             cursor="pointer"
@@ -40,14 +40,11 @@ const UserListItem = ({user, handleFunction, showButtonAddUserGroup}) => {
                 </Box>
             </Box>
             
-            
-            {showButtonAddUserGroup &&
-                <Button
-                    onClick={handleFunction}
-                >
-                    +
-                </Button>
-            }
+            <Button
+                onClick={handleFunction}
+            >
+                +
+            </Button>
             
         </Box>
     )
