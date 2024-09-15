@@ -95,7 +95,11 @@ const ScrollableChat = ({messages}) => {
                                     fontSize: "12px",
                                     position: "absolute",
                                     top: "-20px",
-                                    fontWeight: "bold"
+                                    fontWeight: "bold", 
+                                    width: "130px",
+                                    overflow:"hidden",
+                                    whiteSpace:"nowrap",
+                                    textOverflow:"ellipsis",
                                 }}
                             >
                                 {m.sender.name} 
