@@ -5,13 +5,21 @@ import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import { countTimeSend, formatTime, getSender, getSenderFull, whoIsSendMessage } from "../../handleLogic/ChatLogic";
 import GroupChatModal from "./GroupChatModal";
-import { NotAllowedIcon } from "@chakra-ui/icons";
+import { io } from "socket.io-client";
+
+let socket;
 
 const MyChats = () => {
     const [loggedUser, setLoggedUser] = useState();
-    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain, setIsOpenEmojiPicker, setIsOpenImgPicker } = ChatState();
+    const { user, selectedChat, setSelectedChat, chats, setChats, notification, setNotification, fetchAgain, setFetchAgain, setIsOpenEmojiPicker, setIsOpenImgPicker } = ChatState();
 
     const toast = useToast();
+
+    useEffect(() => {
+        socket = io.connect("http://localhost:8800");
+
+        socket.emit("setup", user); // gọi setup từ server gửi kèm user đang đăng nhập
+    }, []);
 
     const fetchChats = async () => {
         try {
@@ -40,6 +48,18 @@ const MyChats = () => {
         setLoggedUser(JSON.parse(localStorage.getItem("userChatApp")));
         fetchChats();
     }, [fetchAgain]) // useEffect sẽ được gọi lại khi selectedChat thay đổi
+    
+    
+    useEffect(() => {
+        socket.on("fetch chats again", () => {
+            fetchChats();
+        });
+    
+        // Cleanup
+        return () => {
+            socket.off("fetch chats again");
+        };
+    }, [socket]);
 
     return(
         <Box

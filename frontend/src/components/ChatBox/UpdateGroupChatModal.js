@@ -1,10 +1,13 @@
 import { ViewIcon } from "@chakra-ui/icons";
 import { Box, Button, FormControl, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../UserBadgeItem";
 import axios from "axios";
 import UserListItem from "../UserListItem";
+import { io } from "socket.io-client";
+
+let socket;
 
 const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -18,6 +21,12 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
     const toast = useToast();
 
+    useEffect(() => {
+        socket = io.connect("http://localhost:8800");
+
+        socket.emit("setup", user); // gọi setup từ server gửi kèm user đang đăng nhập
+    }, []);
+
     const removeUser = async (userRemoved) => {
         if(selectedChat.groupAdmin._id !== user._id && userRemoved._id !== user._id) {
             toast({
@@ -26,6 +35,42 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
                 duration: 3000,
                 position: "top-right"
             })
+            return;
+        }
+
+        if(selectedChat.users.length === 1) { // xoá luôn nhóm
+            try {
+                const config = {
+                    headers: {
+                        "Content-type": "application/json", // khi gửi dữ liệu cho server dạng object thì dùng "Content-type": "application/json" đi kèm
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    data: {
+                        chatId: selectedChat._id,
+                    }
+                }
+    
+                await axios.delete("http://localhost:8800/api/chat/deleteChat", config)
+
+                setSelectedChat();
+                setFetchAgain(!fetchAgain);
+
+                toast({
+                    title: "Bạn đã xoá nhóm !",
+                    status: "success",
+                    duration: 3000,
+                    position: "top-right"
+                })     
+            } catch (error) {
+                toast({
+                    title: "Xoá nhóm thất bại !",
+                    description: error.message,
+                    status: "error",
+                    duration: 3000,
+                    position: "top-right"
+                })       
+            } 
+            
             return;
         }
 
@@ -38,6 +83,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
                 })
         }
 
+
         try {
             setLoading(true);
 
@@ -48,16 +94,23 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
                 }
             }
 
-            const { data } = await axios.put("http://localhost:8800/api/chat/removeGroup", 
+            let { data } = await axios.put("http://localhost:8800/api/chat/removeUserFromGroup", 
             {
                 chatId: selectedChat._id,
                 userId: userRemoved._id,
                 changeGroupAdmin
             }
             ,config)
-
+            
             userRemoved._id === user._id ?  setSelectedChat() : setSelectedChat(data); 
             setFetchAgain(!fetchAgain); // !fetchAgain để fetch lại
+
+            data = {
+                ...data,
+                users: [...data.users, userRemoved], // vì khi remove user thì không còn id của user đó để gọi socket trong room của user đó để fetch lại các chats, nên phải dùng spread để thêm lại user đã remove khỏi group
+            };
+
+            socket.emit("update user in group", data); 
             fetchMessages(); // gọi lại fetchMessages của bên file SingleChat khi xoá 1 user khỏi group
             setLoading(false);
         } catch (error) {
@@ -185,6 +238,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
 
             setSelectedChat(data);
             setFetchAgain(!fetchAgain); // !fetchAgain để fetch lại
+            socket.emit("update user in group", data);
             setLoading(false);
         } catch (error) {
             toast({

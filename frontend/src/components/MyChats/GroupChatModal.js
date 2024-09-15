@@ -1,9 +1,12 @@
 import { Box, Button, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import axios from "axios";
 import UserListItem from "../UserListItem";
 import UserBadgeItem from "../UserBadgeItem";
+import io from "socket.io-client";
+
+let socket;
 
 const GroupChatModal = ({children}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -16,7 +19,13 @@ const GroupChatModal = ({children}) => {
 
     const toast = useToast();
 
-    const {user, chats, setChats} = ChatState();
+    const {user, chats, setChats, setFetchAgain, fetchAgain} = ChatState();
+
+    useEffect(() => {
+        socket = io.connect("http://localhost:8800");
+
+        socket.emit("setup", user); // gọi setup từ server gửi kèm user đang đăng nhập
+    }, []);
 
     const handleSearch =  async (query) => {
         setSearch(query);   
@@ -86,6 +95,8 @@ const GroupChatModal = ({children}) => {
                             users: JSON.stringify(selectedUsers.map(user => user._id)), name: groupChatName}, config);
 
             setChats([...chats, data]); 
+            setFetchAgain(!fetchAgain);
+            socket.emit("update user in group", data);
             onClose();
             toast({
                 title: "Tạo thành công !",
@@ -94,7 +105,7 @@ const GroupChatModal = ({children}) => {
                 position: "top-right"
             })
             return;
-        } catch (error) {
+        } catch (error) {   
             toast({
                 title: "Tạo thất bại !",
                 status: "warning",

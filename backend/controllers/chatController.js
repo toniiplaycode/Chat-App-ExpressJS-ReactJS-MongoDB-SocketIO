@@ -148,7 +148,7 @@ export const addGroup = async (req, res) => {
     }
 }
 
-export const removeGroup = async (req, res) => {
+export const removeUserFromGroup = async (req, res) => {
     const {chatId, userId, changeGroupAdmin} = req.body;
 
     const removed = await Chat.findByIdAndUpdate(
@@ -170,6 +170,23 @@ export const removeGroup = async (req, res) => {
         throw new Error("Chat not found");
     } else {
         res.status(200).json(removed);
+    }
+
+}
+
+export const deleteChat = async (req, res) => {
+    const {chatId} = req.body;
+
+    if(!chatId) return res.status(400).send({message: "Chat id is requires !"});
+
+    try {
+        const deleted = await Chat.findByIdAndDelete(chatId);
+
+        if(!deleted) return res.status(400).send({message: "Chat not found !"});
+
+        res.status(200).send({message: "Chat deleted successfully"});
+    } catch (error) {
+        res.status(500).send({ message: error.message });
     }
 
 }

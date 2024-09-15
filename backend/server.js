@@ -97,6 +97,13 @@ io.on("connection", (socket) => {
         });
     });
 
+    socket.on("update user in group", (dataRecieved) => {        
+        dataRecieved.users.forEach(user => {
+            if(user._id == dataRecieved.groupAdmin._id) return; // không gửi cho người gửi
+            socket.in(user._id).emit("fetch chats again"); 
+        });
+    })
+
     socket.off("setup", ()=>{
         console.log("user disconnected");
         socket.leave(userData._id)
