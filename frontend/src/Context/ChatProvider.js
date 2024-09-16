@@ -22,7 +22,7 @@ const ChatProvider = ({children}) => {
         if(!userInfo) {
             navigate('/');; // chưa đăng nhập sẽ back lại trang login
         }
-    }, [navigate]) // khi nào chuyển route(dependencies navigate thay đổi) thì callback trong useEffect được gọi
+    }, [navigate, fetchAgain]) // khi nào chuyển route(dependencies navigate thay đổi) thì callback trong useEffect được gọi
 
     return (
         <ChatContext.Provider value={{

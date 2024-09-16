@@ -248,7 +248,7 @@ const SingleChat = () => {
                                 />
                                     {getSender(user, selectedChat.users)}
                                 </Text>
-                                <ProfileModal user={getSenderFull(user, selectedChat.users)}/>
+                                <ProfileModal userProfile={getSenderFull(user, selectedChat.users)}/>
                             </>
                         )     
                         : (

@@ -12,9 +12,19 @@ const Signup = () => {
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [pic, setPic] = useState();
+    const [selectedImageUrl, setSelectedImageUrl] = useState();
 
     const toast = useToast()
     let navigate = useNavigate();
+
+    const handleFileChange = (file) => {
+        if (file) {
+          setSelectedImageUrl(URL.createObjectURL(file));
+          postDetails(file);
+        } else {
+          console.error('No file selected');
+        }
+    };
 
     const postDetails = (pic) => {
         setLoading(true);
@@ -39,12 +49,10 @@ const Signup = () => {
             }) // thêm /image/upload
             .then((res)=> res.json())
             .then((data)=> {
-                console.log(data);
                 setPic(data.url.toString());
                 setLoading(false);
             })
             .catch((error) => {
-                console.log(error);
                 setLoading(false);
             })
         }else{
@@ -141,7 +149,9 @@ const Signup = () => {
     }
 
     return(
-        <VStack spacing={4}>
+        <VStack
+            spacing={4}
+        >
             <FormControl isRequired>
                 <FormLabel>Tên</FormLabel>
                 <Input 
@@ -191,18 +201,41 @@ const Signup = () => {
             
             <FormControl isRequired>
                 <FormLabel>Tải ảnh đại diện</FormLabel>
-                <Input 
-                    type='file'
+                <Input
+                    id="file"
+                    type="file"
+                    display="none" 
                     accept='image/*'
-                    p={1.5}
-                    onChange={(e)=>postDetails(e.target.files[0])}
+                    onChange={(e)=>handleFileChange(e.target.files[0])} 
                 />
+                <Button
+                    p={1.5}
+                    as="label" 
+                    htmlFor="file"
+                    background="lightGrey"
+                    cursor="pointer"
+                    width="100%"
+                >
+                    Chọn ảnh
+                </Button>
             </FormControl>
+            
+            {selectedImageUrl &&
+                <img
+                    style={{ 
+                        width: "100px",
+                        height: "100px",
+                        borderRadius: "50%",
+                        objectFit: "cover"
+                    }}
+                    src={selectedImageUrl}  
+                />
+            }
 
             <Button
             colorScheme='green'
             width={"100%"}
-            my={2}
+            marginTop={"20px"}
             onClick={handleSubmit}
             isLoading={loading}
             >

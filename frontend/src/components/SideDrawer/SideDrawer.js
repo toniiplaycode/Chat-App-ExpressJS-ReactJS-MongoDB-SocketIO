@@ -153,7 +153,7 @@ const SideDrawer = () => {
                             </Box>
                         </MenuButton>
                         <MenuList>
-                            <ProfileModal user={user}>
+                            <ProfileModal userProfile={user}>
                                 <MenuItem>Hồ sơ của tôi</MenuItem>
                             </ProfileModal>
                             <MenuDivider/>

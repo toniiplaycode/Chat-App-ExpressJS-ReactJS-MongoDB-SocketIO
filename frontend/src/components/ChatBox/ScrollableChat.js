@@ -23,33 +23,38 @@ const ScrollableChat = ({messages}) => {
             }
             {messages && messages.map((m, i) => (
                 <>
-                    <div
-                        style={{
-                            display: "flex",
-                            textAlign: "center",
-                            marginBottom: "5px",
-                            justifyContent: "center"
-                        }}
-                    >
-                        <p
+                    {showDateOfLastestMessages(messages, m, i)?.length > 0 &&
+                        <div
                             style={{
-                                width: "100px",
-                                background: "#D8D8D8",
-                                fontSize: "12px", 
-                                borderRadius: "2px"
+                                display: "flex",
+                                textAlign: "center",
+                                marginBottom: "10px",
+                                marginTop: "10px",
+                                justifyContent: "center"
                             }}
                         >
-                            {
-                                showDateOfLastestMessages(messages, m, i)
-                            }
-                        </p>
-                    </div>
+                            <p
+                                style={{
+                                    width: "100px",
+                                    background: "#D8D8D8",
+                                    fontSize: "12px", 
+                                    borderRadius: "2px",
+                                    marginBottom: "10px"
+                                }}
+                            >
+                                {
+                                    showDateOfLastestMessages(messages, m, i)
+                                }
+                            </p>
+                        </div>
+                    }
 
                     <div
                         key={m._id} 
                         style={{
                             display: "flex",
-                            marginRight: "2px"
+                            marginRight: "2px",
+                            marginBottom: "5px",
                         }} 
                         >
                         { (isSameSender(messages, m, i, user._id)
@@ -118,17 +123,18 @@ const ScrollableChat = ({messages}) => {
                                     src={m.content}
                                 /> 
                             : 
-                                <span
+                                <p
                                     style={{
                                         background: `${
                                             m.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
                                         }`,
                                         borderRadius: "10px",
                                         padding: "5px 6px",
+                                        marginTop: "-6px"
                                     }}
                                     >
                                     {m.content}
-                                </span>
+                                </p>
                             }
 
                             <p

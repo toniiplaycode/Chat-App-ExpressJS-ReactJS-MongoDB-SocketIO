@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, authUser, allUsers } from '../controllers/userController.js';
+import { registerUser, authUser, allUsers, updateUser } from '../controllers/userController.js';
 import protect from '../middleware/authMiddleware.js';
 import dotenv from "dotenv";
 
@@ -10,6 +10,7 @@ dotenv.config();
 const initUserRoutes = (app) => {
     router.post("/signup", registerUser)
     router.post("/login", authUser);
+    router.put("/updateUser", protect, updateUser); // tìm kiếm user
     router.get("/", protect, allUsers); // tìm kiếm user
 
     return app.use('/api/user', router);

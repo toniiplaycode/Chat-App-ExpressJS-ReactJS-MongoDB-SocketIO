@@ -85,3 +85,48 @@ export const allUsers = async (req, res) => {
     const users = await User.find(keywork).find({_id: {$ne: req.user._id}});
     res.send(users);
 }
+
+export const updateUser = async (req, res) => {
+    const { id, name, password, pic } = req.body;
+
+    if (!id) {
+        res.status(400);
+        throw new Error("Cannot update user".bgRed);
+    }
+
+    try {
+        const existingUser = await User.findById(id);
+        if (!existingUser) {
+            res.status(404).send({ message: "User not found" });
+            return;
+        }
+
+        if(password?.trim().length > 0) {
+            // 2 dòng dưới mới kích hoặc được middleware mã hoá password
+            existingUser.password = password;
+            await existingUser.save();
+        }
+        
+        const updateFields = {
+            name: name || existingUser.name,
+            pic: pic || existingUser.pic,
+        };
+
+        const updated = await User.findByIdAndUpdate(
+            id,
+            { $set: updateFields },
+            { new: true }
+        );
+
+        res.json({
+            _id: id,
+            name: updated.name,
+            email: updated.email,
+            pic: updated.pic,
+            token: generateToken(id),
+        });
+
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+};
