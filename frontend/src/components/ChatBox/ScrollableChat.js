@@ -144,6 +144,9 @@ const ScrollableChat = ({messages}) => {
                                         }`,
                                         marginTop: "5px",
                                         fontSize: "10px",
+                                        marginBottom: `${
+                                            (selectedChat.groupAdmin && isSameSender(messages, m, i, user._id)) && "20px"
+                                        }`,
                                     }}
                                     >
                                 { showTimeMessageSended(messages, m, i) }

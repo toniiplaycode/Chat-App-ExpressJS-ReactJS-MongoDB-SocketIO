@@ -99,94 +99,93 @@ const MyChats = () => {
                 borderRadius={"lg"}
                 overflowY={"hidden"}
             >
-                { loading 
-                ?
-                    <Spinner size='xl' m={"auto"} display={"block"} mt={"20px"}/>
-                :
-                <Stack 
-                    overflowY={"scroll"}
-                >
-                    {chats.map((chat) => (
-                        <Box
-                            key={chat._id}
-                            onClick={() => {
-                                setIsOpenEmojiPicker(false);
-                                setIsOpenImgPicker(false);
-                                setSelectedChat(chat)
-                                setNotification(notification.filter(n => n.chat._id != chat._id));
-                            }}
-                            cursor="pointer"
-                            bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8"}
-                            px={3}
-                            py={3}
-                            mr={0.5}
-                            borderRadius="lg"
-                            display={"flex"}
-                            alignItems={"center"}
-                            position={"relative"}
-                        >   
-                        
-                            <Avatar
-                                mt={"7px"}
-                                mr={1}
-                                size={"sm"}
-                                border={"1px solid white"}
-                                cursor={"pointer"}
-                                marginY={"auto"}
-                                marginRight={"5px"}
-                                src={chat.chatName == "sender" ? getSenderFull(loggedUser, chat.users).pic : "group.png"}
-                            />
-                            <Box>
-                                <Text
-                                    color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}                                        
-                                    maxWidth={{base: "160px", sm: "250px", md:"180px"}}
-                                    overflow={"hidden"}
-                                    whiteSpace={"nowrap"}
-                                    textOverflow={"ellipsis"}
-                                >
-                                    {!chat.isGroupChat 
-                                    ? getSender(loggedUser, chat.users)
-                                    : chat.chatName} 
-                                </Text>
-                                {chat.lastestMessage && 
-                                <Text
-                                    fontSize={"12px"}                                        
-                                    maxWidth={{base: "160px", sm: "250px", md:"160px"}}
-                                    overflow={"hidden"}
-                                    whiteSpace={"nowrap"}
-                                    textOverflow={"ellipsis"}
-                                >
-                                    {whoIsSendMessage(chat, loggedUser)}
-                                </Text>
-                                }
-                            </Box>
-                            {
-                                notification.map((m) => {
-                                    if(chat._id == m.chat._id) {
-                                        return(
-                                            <Box 
-                                                width={"6px"}
-                                                height={"6px"}
-                                                background={"red"}
-                                                borderRadius={"50%"}
-                                                position={"absolute"}
-                                                right={"6px"}
-                                            />
-                                        )
+                {(loading && chats.length === 0) && <Spinner size='xl' m={"auto"} display={"block"} mt={"20px"}/>}
+
+                {chats && (
+                    <Stack 
+                        overflowY={"scroll"}
+                    >
+                        {chats.map((chat) => (
+                            <Box
+                                key={chat._id}
+                                onClick={() => {
+                                    setIsOpenEmojiPicker(false);
+                                    setIsOpenImgPicker(false);
+                                    setSelectedChat(chat)
+                                    setNotification(notification.filter(n => n.chat._id != chat._id));
+                                }}
+                                cursor="pointer"
+                                bg={selectedChat && selectedChat._id === chat._id ? "#38B2AC" : "#E8E8E8"}
+                                px={3}
+                                py={3}
+                                mr={0.5}
+                                borderRadius="lg"
+                                display={"flex"}
+                                alignItems={"center"}
+                                position={"relative"}
+                            >   
+                            
+                                <Avatar
+                                    mt={"7px"}
+                                    mr={1}
+                                    size={"sm"}
+                                    border={"1px solid white"}
+                                    cursor={"pointer"}
+                                    marginY={"auto"}
+                                    marginRight={"5px"}
+                                    src={chat.chatName == "sender" ? getSenderFull(loggedUser, chat.users).pic : "group.png"}
+                                />
+                                <Box>
+                                    <Text
+                                        color={selectedChat && selectedChat._id === chat._id ? "white" : "#333"}                                        
+                                        maxWidth={{base: "100px", sm: "250px", md:"180px"}}
+                                        overflow={"hidden"}
+                                        whiteSpace={"nowrap"}
+                                        textOverflow={"ellipsis"}
+                                    >
+                                        {!chat.isGroupChat 
+                                        ? getSender(loggedUser, chat.users)
+                                        : chat.chatName} 
+                                    </Text>
+                                    {chat.lastestMessage && 
+                                    <Text
+                                        fontSize={"12px"}                                        
+                                        maxWidth={{base: "100px", sm: "250px", md:"160px"}}
+                                        overflow={"hidden"}
+                                        whiteSpace={"nowrap"}
+                                        textOverflow={"ellipsis"}
+                                    >
+                                        {whoIsSendMessage(chat, loggedUser)}
+                                    </Text>
                                     }
-                                })
-                            }
-                            <Text
-                                position={"absolute"}
-                                right={"16px"}
-                                fontSize={"12px"}
-                            >
-                                {countTimeSend(chat.lastestMessage)} 
-                            </Text>            
-                        </Box>
-                    ))}
-                </Stack>
-                }
+                                </Box>
+                                {
+                                    notification.map((m) => {
+                                        if(chat._id == m.chat._id) {
+                                            return(
+                                                <Box 
+                                                    width={"6px"}
+                                                    height={"6px"}
+                                                    background={"red"}
+                                                    borderRadius={"50%"}
+                                                    position={"absolute"}
+                                                    right={"6px"}
+                                                />
+                                            )
+                                        }
+                                    })
+                                }
+                                <Text
+                                    position={"absolute"}
+                                    right={"16px"}
+                                    fontSize={"12px"}
+                                >
+                                    {countTimeSend(chat.lastestMessage)} 
+                                </Text>            
+                            </Box>
+                        ))}
+                    </Stack>
+                )}
             </Box>
 
         </Box>
