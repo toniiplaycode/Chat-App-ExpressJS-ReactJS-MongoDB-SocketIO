@@ -1,5 +1,5 @@
 <h2>
-  <img src="https://github.com/user-attachments/assets/982f8b42-42c0-480e-8688-03eacf0375b5" alt="Chat App" style="vertical-align: middle; width: 40px; height: 40px;">
+  <img src="https://github.com/user-attachments/assets/982f8b42-42c0-480e-8688-03eacf0375b5" alt="Chat App" style="vertical-align: middle; width: 30px; height: 30px;">
   Chat App - MERN
 </h2>
 
