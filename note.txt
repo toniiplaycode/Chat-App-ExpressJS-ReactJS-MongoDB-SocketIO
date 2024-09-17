@@ -1,4 +1,4 @@
-- tutorial RoadSideCoder (https://www.youtube.com/watch?v=29FEesnQrjA&list=PLKhlp2qtUcSZsGkxAdgnPcHioRr-4guZf&index=4&ab_channel=RoadsideCoder)
+- ý tưởng: tutorial RoadSideCoder (https://www.youtube.com/watch?v=29FEesnQrjA&list=PLKhlp2qtUcSZsGkxAdgnPcHioRr-4guZf&index=4&ab_channel=RoadsideCoder) 
 - sử dụng Chakra UI, lai lai bootstrap
 - dùng JWT để tạo token 
 - dùng bcrypt để mã hoá password khi sign up
