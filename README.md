@@ -15,14 +15,15 @@
 -  Change your information, change your password
 
 ### Languages & Tools:
--  Backend:
-#### ExpressJS, Socket.IO, JWT, MongoDB(using Mongoose)
--  Frontend:
-#### ReactJS, Socket.IO Client, Axios, Chakra UI, React Icon, Emoji Mart
--  Database, Clound:
-#### MongoDB Atlas, Cloundinary 
--  Deploy:
-#### Render(backend), Vercel(Frontend) 
+
+#### Backend:
+-  ExpressJS, Socket.IO, JWT, MongoDB(using Mongoose)
+#### Frontend:
+-  ReactJS, Socket.IO Client, Axios, Chakra UI, React Icon, Emoji Mart
+#### Database, Clound:
+-  MongoDB Atlas, Cloundinary 
+#### Deploy:
+-  Render(backend), Vercel(Frontend) 
 
 ### Project Screenshot:
 
@@ -40,6 +41,9 @@
 
 #### Send emoji to your friend:
 <img src="https://github.com/user-attachments/assets/9d7c8be4-9771-4496-925b-7b20dbb96eb3" alt="Chat App" border="0">
+
+#### Send Image:
+<img src="https://github.com/user-attachments/assets/49e6843f-8acc-4a37-af6b-f5feb82e53b0" alt="Chat App" border="0">
 
 #### Search someone and chat with their:
 <img src="https://github.com/user-attachments/assets/33eb3bc9-17a4-4e1b-8f17-a5afc1e23c65" alt="Chat App" border="0">
