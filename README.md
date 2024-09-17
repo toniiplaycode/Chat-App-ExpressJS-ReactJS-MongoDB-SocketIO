@@ -3,7 +3,7 @@
   Chat App - MERN
 </h2>
 
-### Live Preview: https://chat-app-mern-pro.vercel.app/chats
+### Live Preview: https://chat-app-mern-pro.vercel.app
 
 ### You can use account guest if you don't want sign up
 
