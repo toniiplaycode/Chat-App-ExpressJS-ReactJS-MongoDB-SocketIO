@@ -23,7 +23,7 @@
 -  ExpressJS, Socket.IO, JWT, MongoDB(using Mongoose)
 #### Frontend:
 -  ReactJS, Socket.IO Client, Axios, Chakra UI, React Icon, Emoji Mart
-#### Database, Clound:
+#### Database online, Clound:
 -  MongoDB Atlas, Cloundinary 
 #### Deploy:
 -  Render(backend), Vercel(Frontend) 
